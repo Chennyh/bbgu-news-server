@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: bbgu-news
+  profiles:
+    active: dev #默认为开发环境
+  servlet:
+    multipart:
+      enabled: true #开启文件上传
+      max-file-size: 10MB #限制文件上传大小为10M
+
+mybatis:
+  type-aliases-package: com.chennyh.bbgunews.pojo
+
+jwt:
+  loginUrl: /user/login #登录的地址
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: bbgu-news #JWT加解密使用的密钥
+  expiration: 604800 #JWT的超期限时间(60*60*24*7)
+  tokenHead: 'Bearer ' #JWT负载中拿到开头
+  tokenType: JWT
+
+
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /swagger-ui/*
+      - /swagger-resources/**
+      - /swagger/**
+      - /**/v3/api-docs
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
+      - /webjars/springfox-swagger-ui/**
+      - /actuator/**
+      - /druid/**
+      - /user/login
+      - /user/register
+      - /user/info
+      - /user/logout
