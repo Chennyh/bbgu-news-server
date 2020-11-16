@@ -19,6 +19,24 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>30.0-jre</version>
+		</dependency>
+
+		<!--    hutool 工具包    -->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-core</artifactId>
+			<version>5.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-json</artifactId>
+			<version>5.5.0</version>
+		</dependency>
+
 		<!--   JWT     -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>

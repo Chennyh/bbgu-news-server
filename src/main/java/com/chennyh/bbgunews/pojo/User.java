@@ -1,0 +1,59 @@
+package com.chennyh.bbgunews.pojo;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+
+import java.util.Date;
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * @author Chennyh
+ * @date 2020/11/16 18:56
+ * @description 用户表
+ */
+@ApiModel(value="com-chennyh-bbgunews-pojo-User")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class User {
+    /**
+    * 用户ID
+    */
+    @ApiModelProperty(value="用户ID")
+    private Long id;
+
+    /**
+    * 用户名
+    */
+    @ApiModelProperty(value="用户名")
+    private String username;
+
+    /**
+    * 用户密码
+    */
+    @ApiModelProperty(value="用户密码")
+    private String password;
+
+    /**
+    * 状态 0：禁用，1：启用
+    */
+    @ApiModelProperty(value="状态 0：禁用，1：启用")
+    private Boolean enable;
+
+    /**
+    * 创建时间
+    */
+    @ApiModelProperty(value="创建时间")
+    private Date createTime;
+
+    /**
+    * 修改时间
+    */
+    @ApiModelProperty(value="修改时间")
+    private Date updateTime;
+}
