@@ -1,64 +1,56 @@
 package com.chennyh.bbgunews.exception;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.chennyh.bbgunews.common.CommonResult;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author Chennyh
- * @date 2020/11/16 21:44
+ * @date 2020/11/17 11:10
  * @description 全局异常处理
  */
 @ControllerAdvice
-@ResponseBody
-@Slf4j
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(BaseException.class)
-    public ResponseEntity<ErrorResponse> handleBaseException(BaseException ex, HttpServletRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse(ex, request.getRequestURI());
-        log.error("occur BaseException:" + errorResponse.toString());
-        return ResponseEntity.status(ex.getErrorCode().getStatus()).body(errorResponse);
+    @ResponseBody
+    @ExceptionHandler(value = BaseException.class)
+    public CommonResult<String> handle(BaseException e) {
+        if (e.getErrorCode() != null) {
+            return CommonResult.failed(e.getErrorCode());
+        }
+        return CommonResult.failed(e.getMessage());
     }
 
-    /**
-     * 请求参数异常处理
-     */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        Map<String, Object> errors = new HashMap<>(8);
-        ex.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.METHOD_ARGUMENT_NOT_VALID, request.getRequestURI(), errors);
-        log.error("occur MethodArgumentNotValidException:" + errorResponse.toString());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    @ResponseBody
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public CommonResult<String> handleValidException(MethodArgumentNotValidException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        String message = null;
+        if (bindingResult.hasErrors()) {
+            FieldError fieldError = bindingResult.getFieldError();
+            if (fieldError != null) {
+                message = fieldError.getField()+fieldError.getDefaultMessage();
+            }
+        }
+        return CommonResult.validateFailed(message);
     }
 
-    @ExceptionHandler(value = UserNameAlreadyExistException.class)
-    public ResponseEntity<ErrorResponse> handleUserNameAlreadyExistException(UserNameAlreadyExistException ex, HttpServletRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse(ex, request.getRequestURI());
-        log.error("occur UserNameAlreadyExistException:" + errorResponse.toString());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-    }
-
-    @ExceptionHandler(value = {RoleNotFoundException.class, UserNameNotFoundException.class})
-    public ResponseEntity<ErrorResponse> handleUserNotFoundException(BaseException ex, HttpServletRequest request) {
-        ErrorResponse errorResponse = new ErrorResponse(ex, request.getRequestURI());
-        log.error("occur ResourceNotFoundException:" + errorResponse.toString());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    @ResponseBody
+    @ExceptionHandler(value = BindException.class)
+    public CommonResult<String> handleValidException(BindException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        String message = null;
+        if (bindingResult.hasErrors()) {
+            FieldError fieldError = bindingResult.getFieldError();
+            if (fieldError != null) {
+                message = fieldError.getField()+fieldError.getDefaultMessage();
+            }
+        }
+        return CommonResult.validateFailed(message);
     }
 
 }

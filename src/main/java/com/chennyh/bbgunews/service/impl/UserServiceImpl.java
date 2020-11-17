@@ -3,21 +3,18 @@ package com.chennyh.bbgunews.service.impl;
 import com.chennyh.bbgunews.dao.UserRoleMapper;
 import com.chennyh.bbgunews.dto.UserDetailsImpl;
 import com.chennyh.bbgunews.dto.UserLoginDTO;
-import com.chennyh.bbgunews.exception.UserEnableFailedException;
-import com.chennyh.bbgunews.exception.UserLoginFailedException;
-import com.chennyh.bbgunews.exception.UserNameNotFoundException;
-import com.chennyh.bbgunews.exception.UserPasswordFailedException;
+import com.chennyh.bbgunews.exception.Asserts;
 import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.User;
 import com.chennyh.bbgunews.pojo.UserRole;
 import com.chennyh.bbgunews.utils.JwtTokenUtil;
-import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -51,17 +48,14 @@ public class UserServiceImpl implements UserService{
         if (user != null) {
             return user;
         }
-        throw new UserNameNotFoundException(ImmutableMap.of("username", username));
+        throw new UsernameNotFoundException("用户名或密码错误");
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = getUserByUserName(username);
         List<Role> roles = userRoleMapper.getAllByUserId(user.getId());
-        if (user != null) {
-            return new UserDetailsImpl(user, roles);
-        }
-        throw new UserLoginFailedException(ImmutableMap.of("user", user));
+        return new UserDetailsImpl(user, roles);
     }
 
     @Override
@@ -90,10 +84,10 @@ public class UserServiceImpl implements UserService{
         try {
             UserDetails userDetails = loadUserByUsername(userLoginDTO.getUsername());
             if(!passwordEncoder.matches(userLoginDTO.getPassword(),userDetails.getPassword())){
-                throw new UserPasswordFailedException(ImmutableMap.of("password", userLoginDTO.getPassword()));
+                Asserts.fail("密码不正确");
             }
             if(!userDetails.isEnabled()){
-                throw new UserEnableFailedException(ImmutableMap.of("enable", false));
+                Asserts.fail("帐号已被禁用");
             }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -103,6 +97,5 @@ public class UserServiceImpl implements UserService{
         }
         return token;
     }
-
 
 }

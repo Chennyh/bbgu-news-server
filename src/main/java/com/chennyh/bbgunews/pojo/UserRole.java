@@ -1,6 +1,5 @@
 package com.chennyh.bbgunews.pojo;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
  * @date 2020/11/16 22:18
  * @description 用户角色表
  */
-@ApiModel(value="com-chennyh-bbgunews-pojo-UserRole")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

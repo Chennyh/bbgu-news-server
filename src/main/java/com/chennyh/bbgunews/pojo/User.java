@@ -1,11 +1,9 @@
 package com.chennyh.bbgunews.pojo;
 
-import io.swagger.annotations.ApiModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
-
 import java.util.Date;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +14,6 @@ import lombok.NoArgsConstructor;
  * @date 2020/11/16 18:56
  * @description 用户表
  */
-@ApiModel(value="com-chennyh-bbgunews-pojo-User")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,6 +33,7 @@ public class User {
     /**
     * 用户密码
     */
+    @JsonIgnore
     @ApiModelProperty(value="用户密码")
     private String password;
 

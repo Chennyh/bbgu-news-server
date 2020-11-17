@@ -20,3 +20,8 @@ logging:
   level:
     root: info
     com.chennyh.bbgunews.dao: info
+
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: false

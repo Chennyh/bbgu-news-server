@@ -7,7 +7,6 @@ import com.chennyh.bbgunews.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,7 +20,7 @@ import java.util.Map;
  * @description 用户控制器
  */
 @RestController
-@Api("用户接口")
+@Api(tags = "用户接口", value = "用户相关所有接口")
 @RequestMapping("/user")
 public class UserController {
 
@@ -43,10 +42,10 @@ public class UserController {
         return CommonResult.success(user);
     }
 
-    @ApiOperation("用户登录，成功返回token")
+    @ApiOperation(value = "用户登录",notes = "成功返回token")
     @PostMapping("/login")
     @ResponseBody
-    public CommonResult login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
+    public CommonResult<Map<String, String>> login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
         String token = userService.login(userLoginDTO);
         if (token == null) {
             return CommonResult.validateFailed("用户名或密码错误");
