@@ -9,10 +9,10 @@ import com.chennyh.bbgunews.common.IErrorCode;
  */
 public class Asserts {
     public static void fail(String message) {
-        throw new BaseException(message);
+        throw new ApiException(message);
     }
 
     public static void fail(IErrorCode errorCode) {
-        throw new BaseException(errorCode);
+        throw new ApiException(errorCode);
     }
 }

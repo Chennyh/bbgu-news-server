@@ -3,6 +3,7 @@ package com.chennyh.bbgunews.service.impl;
 import com.chennyh.bbgunews.dao.UserRoleMapper;
 import com.chennyh.bbgunews.dto.UserDetailsImpl;
 import com.chennyh.bbgunews.dto.UserLoginDTO;
+import com.chennyh.bbgunews.exception.ApiException;
 import com.chennyh.bbgunews.exception.Asserts;
 import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.User;
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService{
         if (user != null) {
             return user;
         }
-        throw new UsernameNotFoundException("用户名或密码错误");
+        throw new UsernameNotFoundException("用户名或密码错误！");
     }
 
     @Override
@@ -62,14 +63,17 @@ public class UserServiceImpl implements UserService{
     public User register(UserLoginDTO userLoginDTO) {
         User user = new User();
         BeanUtils.copyProperties(userLoginDTO, user);
-        //TODO: 查询用户名是否存在
-
-
+        //查询用户名是否存在
+        if (getUserByUserName(user.getUsername()) != null) {
+            log.warn("用户名已存在！");
+            throw new ApiException("用户名已存在！");
+        }
         //密码加密
         String encodePassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodePassword);
         userMapper.insertSelective(user);
-        user = userMapper.getOneByUsername(userLoginDTO.getUsername());
+        user = userMapper.getOneByUsername(user.getUsername());
+
         //添加权限，默认为普通用户
         List<UserRole> userRoles = new ArrayList<>();
         userRoles.add(new UserRole(user.getId(), (long) 1));

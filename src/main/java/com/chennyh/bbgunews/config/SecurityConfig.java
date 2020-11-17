@@ -76,36 +76,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new RestAuthenticationEntryPoint();
     }
 
-    @ConditionalOnBean(name = "dynamicSecurityService")
-    @Bean
-    public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
-        return new DynamicAccessDecisionManager();
-    }
-
-    @ConditionalOnBean(name = "dynamicSecurityService")
-    @Bean
-    public DynamicSecurityFilter dynamicSecurityFilter() {
-        return new DynamicSecurityFilter();
-    }
-
-    @ConditionalOnBean(name = "dynamicSecurityService")
-    @Bean
-    public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
-        return new DynamicSecurityMetadataSource();
-    }
-
-
-    @Bean
-    public DynamicSecurityService dynamicSecurityService() {
-        return () -> {
-            Map<String, ConfigAttribute> map = new ConcurrentHashMap<>();
+//    @ConditionalOnBean(name = "dynamicSecurityService")
+//    @Bean
+//    public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
+//        return new DynamicAccessDecisionManager();
+//    }
+//
+//    @ConditionalOnBean(name = "dynamicSecurityService")
+//    @Bean
+//    public DynamicSecurityFilter dynamicSecurityFilter() {
+//        return new DynamicSecurityFilter();
+//    }
+//
+//    @ConditionalOnBean(name = "dynamicSecurityService")
+//    @Bean
+//    public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
+//        return new DynamicSecurityMetadataSource();
+//    }
+//
+//
+//    @Bean
+//    public DynamicSecurityService dynamicSecurityService() {
+//        return () -> {
+//            Map<String, ConfigAttribute> map = new ConcurrentHashMap<>();
 //                List<UmsResource> resourceList = resourceService.listAll();
 //                for (UmsResource resource : resourceList) {
 //                    map.put(resource.getUrl(), new org.springframework.security.access.SecurityConfig(resource.getId() + ":" + resource.getName()));
 //                }
-            return map;
-        };
-    }
+//            return map;
+//        };
+//    }
 
     @Bean
     @Override

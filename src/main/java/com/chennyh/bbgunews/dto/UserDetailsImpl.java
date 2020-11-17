@@ -16,8 +16,8 @@ import java.util.List;
  * @description SpringSecurity需要的用户详情
  */
 public class UserDetailsImpl implements UserDetails {
-    private User user;
-    private List<Role> roles;
+    private final User user;
+    private final List<Role> roles;
 
     public UserDetailsImpl(User user, List<Role> roles) {
         this.user = user;

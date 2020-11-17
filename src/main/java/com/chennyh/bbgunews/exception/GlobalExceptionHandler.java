@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ResponseBody
-    @ExceptionHandler(value = BaseException.class)
-    public CommonResult<String> handle(BaseException e) {
+    @ExceptionHandler(value = ApiException.class)
+    public CommonResult<String> handle(ApiException e) {
         if (e.getErrorCode() != null) {
             return CommonResult.failed(e.getErrorCode());
         }

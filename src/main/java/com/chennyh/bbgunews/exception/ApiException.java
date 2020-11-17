@@ -7,23 +7,23 @@ import com.chennyh.bbgunews.common.IErrorCode;
  * @date 2020/11/16 21:37
  * @description 自定义API异常
  */
-public class BaseException extends RuntimeException {
+public class ApiException extends RuntimeException {
     private IErrorCode errorCode;
 
-    public BaseException(IErrorCode errorCode) {
+    public ApiException(IErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 
-    public BaseException(String message) {
+    public ApiException(String message) {
         super(message);
     }
 
-    public BaseException(Throwable cause) {
+    public ApiException(Throwable cause) {
         super(cause);
     }
 
-    public BaseException(String message, Throwable cause) {
+    public ApiException(String message, Throwable cause) {
         super(message, cause);
     }
 
