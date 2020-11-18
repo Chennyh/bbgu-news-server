@@ -14,9 +14,11 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 @Setter
 public class UserLoginDTO {
+
     @NotEmpty
     @ApiModelProperty(value = "用户名",required = true)
     private String username;
+
     @NotEmpty
     @ApiModelProperty(value = "用户密码",required = true)
     private String password;

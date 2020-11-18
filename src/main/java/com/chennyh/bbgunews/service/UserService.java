@@ -1,8 +1,12 @@
 package com.chennyh.bbgunews.service;
 
+import com.chennyh.bbgunews.dto.QueryUserDTO;
+import com.chennyh.bbgunews.dto.UserInfoDTO;
 import com.chennyh.bbgunews.dto.UserLoginDTO;
 import com.chennyh.bbgunews.pojo.User;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.List;
 
 /**
  * @author Chennyh
@@ -37,4 +41,18 @@ public interface UserService{
      * @return 返回token
      */
     String login(UserLoginDTO userLoginDTO);
+
+    /**
+     * 获取所有用户
+     * @return 用户列表
+     */
+    List<User> getAllUser();
+
+    /**
+     * 通过指定选项获取信息
+     * @param queryUserDTO 用户对象，需要指定至少一个参数，如ID
+     * @return 用户具体信息
+     */
+    UserInfoDTO getUser(QueryUserDTO queryUserDTO);
+
 }

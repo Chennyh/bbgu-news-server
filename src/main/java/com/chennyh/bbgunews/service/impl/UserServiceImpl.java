@@ -1,7 +1,11 @@
 package com.chennyh.bbgunews.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.chennyh.bbgunews.dao.UserRoleMapper;
+import com.chennyh.bbgunews.dto.QueryUserDTO;
 import com.chennyh.bbgunews.dto.UserDetailsImpl;
+import com.chennyh.bbgunews.dto.UserInfoDTO;
 import com.chennyh.bbgunews.dto.UserLoginDTO;
 import com.chennyh.bbgunews.exception.ApiException;
 import com.chennyh.bbgunews.exception.Asserts;
@@ -46,7 +50,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserByUserName(String username) {
         User user = userMapper.getOneByUsername(username);
-        if (user != null) {
+        if (BeanUtil.isNotEmpty(user)) {
             return user;
         }
         throw new UsernameNotFoundException("用户名或密码错误！");
@@ -64,7 +68,7 @@ public class UserServiceImpl implements UserService{
         User user = new User();
         BeanUtils.copyProperties(userLoginDTO, user);
         //查询用户名是否存在
-        if (getUserByUserName(user.getUsername()) != null) {
+        if (BeanUtil.isNotEmpty(getUserByUserName(user.getUsername()))) {
             log.warn("用户名已存在！");
             throw new ApiException("用户名已存在！");
         }
@@ -100,6 +104,35 @@ public class UserServiceImpl implements UserService{
             log.warn("登录异常:{}", e.getMessage());
         }
         return token;
+    }
+
+    @Override
+    public List<User> getAllUser() {
+        List<User> all = userMapper.getByAll(new User());
+        if (CollUtil.isNotEmpty(all)) {
+            return all;
+        }
+        throw new ApiException("未获取到用户列表");
+    }
+
+    @Override
+    public UserInfoDTO getUser(QueryUserDTO queryUserDTO) {
+        UserInfoDTO userInfoDTO = getUserInfoDTO(queryUserDTO);
+        if (BeanUtil.isNotEmpty(userInfoDTO)) {
+            return userInfoDTO;
+        }
+        throw new ApiException("未获取指定到用户");
+    }
+
+    private UserInfoDTO getUserInfoDTO(QueryUserDTO queryUserDTO) {
+        User user = new User();
+        BeanUtils.copyProperties(queryUserDTO, user);
+        User oneByAll = userMapper.getOneByAll(user);
+
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        BeanUtils.copyProperties(oneByAll, userInfoDTO);
+        userInfoDTO.setRoles(userRoleMapper.getAllByUserId(userInfoDTO.getId()));
+        return userInfoDTO;
     }
 
 }

@@ -1,4 +1,5 @@
 package com.chennyh.bbgunews.dao;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -17,5 +18,10 @@ public interface UserMapper {
     User getOneByUsername(@Param("username")String username);
 
     int insertSelective(User user);
+
+    List<User> getByAll(User user);
+
+    User getOneByAll(User user);
+
 
 }
