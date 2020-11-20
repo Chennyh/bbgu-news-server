@@ -3,22 +3,23 @@ package com.chennyh.bbgunews.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.chennyh.bbgunews.common.CommonPage;
 import com.chennyh.bbgunews.common.CommonResult;
-import com.chennyh.bbgunews.dto.QueryUserDTO;
 import com.chennyh.bbgunews.dto.UserInfoDTO;
 import com.chennyh.bbgunews.dto.UserLoginDTO;
+import com.chennyh.bbgunews.dto.UserUpdateDTO;
+import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.User;
 import com.chennyh.bbgunews.service.UserService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,27 +66,98 @@ public class UserController {
         return CommonResult.success(tokenMap);
     }
 
-    @ApiOperation(value = "获取所有用户信息", notes = "成功返回用户列表")
-    @GetMapping("/all")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @ApiOperation(value = "用户退出")
+    @PostMapping("/logout")
     @ResponseBody
-    public CommonResult<List<User>> getAllUser() {
-        List<User> allUser = userService.getAllUser();
-        if (CollUtil.isEmpty(allUser)) {
-            return CommonResult.failed("获取失败");
-        }
-        return CommonResult.success(allUser);
+    public CommonResult<String> logout() {
+        return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "获取指定用户信息", notes = "成功返回用户信息JSON")
-    @GetMapping
+    @ApiOperation(value = "获取所有用户信息", notes = "成功返回用户列表")
+    @GetMapping("/list")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ResponseBody
-    public CommonResult<UserInfoDTO> getUser(@ModelAttribute QueryUserDTO queryUserDTO) {
-        UserInfoDTO userInfoDTO = userService.getUser(queryUserDTO);
+    public CommonResult<CommonPage<User>> getUserList(@RequestParam(value = "keyword", required = false) String keyword,
+                                                      @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                      @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        List<User> users = userService.getUserList(keyword, pageSize, pageNum);
+        if (CollUtil.isEmpty(users)) {
+            return CommonResult.failed("获取失败");
+        }
+        return CommonResult.success(CommonPage.restPage(users));
+    }
+
+    @ApiOperation(value = "获取当前登录用户信息", notes = "成功返回用户信息JSON")
+    @GetMapping("/info")
+    @ResponseBody
+    public CommonResult<UserInfoDTO> getCurrentUser(Principal principal) {
+        if (principal == null) {
+            return CommonResult.unauthorized(null);
+        }
+        String username = principal.getName();
+        User user = userService.getUserByUserName(username);
+        UserInfoDTO userInfoDTO = userService.getUser(user);
         if (BeanUtil.isEmpty(userInfoDTO)) {
             return CommonResult.failed("获取失败");
         }
         return CommonResult.success(userInfoDTO);
     }
+
+    @ApiOperation(value = "获取指定用户信息", notes = "成功返回用户信息JSON")
+    @GetMapping("/{id}")
+    @ResponseBody
+    public CommonResult<UserInfoDTO> getUserInfo(@PathVariable Long id) {
+        User user = userService.getUserByUserId(id);
+        UserInfoDTO userInfoDTO = userService.getUser(user);
+        if (BeanUtil.isEmpty(userInfoDTO)) {
+            return CommonResult.failed("获取失败");
+        }
+        return CommonResult.success(userInfoDTO);
+    }
+
+    @ApiOperation(value = "修改指定用户信息")
+    @PutMapping("/{id}")
+    @ResponseBody
+    public CommonResult<Integer> updateUserInfo(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO) {
+        int count = userService.updateUser(id, userUpdateDTO);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation(value = "删除指定用户")
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public CommonResult<Integer> deleteUser(@PathVariable Long id) {
+        int count = userService.deleteUser(id);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed("用户不存在");
+    }
+
+    @ApiOperation(value = "修改指定用户角色信息")
+    @PutMapping("/roles/{id}")
+    @ResponseBody
+    public CommonResult<Integer> updateUserRoles(@PathVariable Long id, @RequestParam List<Long> roleIds) {
+        int count = userService.updateRoles(id, roleIds);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation(value = "获取指定用户角色信息")
+    @GetMapping("/roles/{id}")
+    @ResponseBody
+    public CommonResult<List<Role>> getUserRoles(@PathVariable Long id) {
+        List<Role> roles = userService.getRoles(id);
+        if (CollUtil.isNotEmpty(roles)) {
+            return CommonResult.success(roles);
+        }
+        return CommonResult.failed();
+    }
+
 
 }

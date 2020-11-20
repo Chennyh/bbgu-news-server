@@ -3,6 +3,7 @@ package com.chennyh.bbgunews.dao;
 import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.UserRole;
 import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -15,9 +16,11 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserRoleMapper {
 
-    List<Role> getAllByUserId(@Param("userId")Long userId);
+    List<Role> getAllByUserId(@Param("userId") Long userId);
 
-    int insertList(@Param("list")List<UserRole> list);
+    int insertList(@Param("list") List<UserRole> list);
+
+    int deleteByUserId(@Param("userId") Long userId);
 
 
 }

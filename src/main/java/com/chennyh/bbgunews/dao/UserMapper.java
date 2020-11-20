@@ -1,5 +1,5 @@
 package com.chennyh.bbgunews.dao;
-import java.util.Date;
+
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -15,13 +15,21 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
 
-    User getOneByUsername(@Param("username")String username);
+    User getOneByUsername(@Param("username") String username);
+
+    User getOneById(@Param("id") Long id);
 
     int insertSelective(User user);
 
     List<User> getByAll(User user);
 
     User getOneByAll(User user);
+
+    List<User> getAllByUsernameLike(@Param("likeUsername") String likeUsername);
+
+    int updateById(@Param("updated") User updated, @Param("id") Long id);
+
+    int deleteById(@Param("id") Long id);
 
 
 }

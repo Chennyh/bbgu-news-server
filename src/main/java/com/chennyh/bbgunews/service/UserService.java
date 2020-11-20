@@ -1,8 +1,9 @@
 package com.chennyh.bbgunews.service;
 
-import com.chennyh.bbgunews.dto.QueryUserDTO;
 import com.chennyh.bbgunews.dto.UserInfoDTO;
 import com.chennyh.bbgunews.dto.UserLoginDTO;
+import com.chennyh.bbgunews.dto.UserUpdateDTO;
+import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,16 +14,26 @@ import java.util.List;
  * @date 2020/11/16 18:56
  * @description 用户服务类
  */
-public interface UserService{
+public interface UserService {
     /**
      * 通过用户名获取用户对象
+     *
      * @param username 用户名
      * @return User对象
      */
     User getUserByUserName(String username);
 
     /**
+     * 通过用户名获取用户对象
+     *
+     * @param id 用户ID
+     * @return User对象
+     */
+    User getUserByUserId(Long id);
+
+    /**
      * 获取用户信息
+     *
      * @param username 用户名
      * @return 用户详情
      */
@@ -30,6 +41,7 @@ public interface UserService{
 
     /**
      * 注册用户
+     *
      * @param userLoginDTO 用户登录DTO
      * @return 用户对象
      */
@@ -37,22 +49,62 @@ public interface UserService{
 
     /**
      * 登录用户
+     *
      * @param userLoginDTO 用户登录DTO
      * @return 返回token
      */
     String login(UserLoginDTO userLoginDTO);
 
     /**
-     * 获取所有用户
-     * @return 用户列表
-     */
-    List<User> getAllUser();
-
-    /**
      * 通过指定选项获取信息
-     * @param queryUserDTO 用户对象，需要指定至少一个参数，如ID
+     *
+     * @param user 用户对象
      * @return 用户具体信息
      */
-    UserInfoDTO getUser(QueryUserDTO queryUserDTO);
+    UserInfoDTO getUser(User user);
+
+    /**
+     * 根据用户名分页查询用户
+     *
+     * @param keyword  用户名，不必须
+     * @param pageSize 页数
+     * @param pageNum  页码
+     * @return 分页后的用户信息
+     */
+    List<User> getUserList(String keyword, Integer pageSize, Integer pageNum);
+
+    /**
+     * 更新用户信息
+     *
+     * @param id            用户ID
+     * @param userUpdateDTO 用户信息DTO
+     * @return 修改的行数
+     */
+    int updateUser(Long id, UserUpdateDTO userUpdateDTO);
+
+    /**
+     * 删除指定用户
+     *
+     * @param id 用户id
+     * @return 修改的行数
+     */
+    int deleteUser(Long id);
+
+    /**
+     * 修改用户角色信息
+     *
+     * @param id      用户ID
+     * @param roleIds 角色ID列表
+     * @return 修改的行数
+     */
+    int updateRoles(Long id, List<Long> roleIds);
+
+    /**
+     * 获取指定用户的角色列表
+     *
+     * @param id 用户ID
+     * @return 角色列表
+     */
+    List<Role> getRoles(Long id);
 
 }
