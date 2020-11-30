@@ -31,5 +31,7 @@ public interface UserMapper {
 
     int deleteById(@Param("id") Long id);
 
+    int updateStatusById(@Param("updatedStatus")Boolean updatedStatus,@Param("id")Long id);
+
 
 }

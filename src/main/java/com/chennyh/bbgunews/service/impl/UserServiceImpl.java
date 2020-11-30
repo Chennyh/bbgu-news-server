@@ -4,10 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.chennyh.bbgunews.dao.UserRoleMapper;
-import com.chennyh.bbgunews.dto.UserDetailsImpl;
-import com.chennyh.bbgunews.dto.UserInfoDTO;
-import com.chennyh.bbgunews.dto.UserLoginDTO;
-import com.chennyh.bbgunews.dto.UserUpdateDTO;
+import com.chennyh.bbgunews.dto.*;
 import com.chennyh.bbgunews.exception.ApiException;
 import com.chennyh.bbgunews.exception.Asserts;
 import com.chennyh.bbgunews.pojo.Role;
@@ -80,9 +77,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(UserLoginDTO userLoginDTO) {
+    public User register(UserRegisterDTO userRegisterDTO) {
         User user = new User();
-        BeanUtils.copyProperties(userLoginDTO, user);
+        BeanUtils.copyProperties(userRegisterDTO, user);
         //查询用户名是否存在
         if (BeanUtil.isNotEmpty(getUserByUserName(user.getUsername()))) {
             log.warn("用户名已存在！");
@@ -91,6 +88,7 @@ public class UserServiceImpl implements UserService {
         //密码加密
         String encodePassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodePassword);
+        user.setStatus(user.getStatus());
         userMapper.insertSelective(user);
         user = userMapper.getOneByUsername(user.getUsername());
 
@@ -120,6 +118,11 @@ public class UserServiceImpl implements UserService {
             log.warn("登录异常:{}", e.getMessage());
         }
         return token;
+    }
+
+    @Override
+    public String refreshToken(String oldToken) {
+        return jwtTokenUtil.refreshHeadToken(oldToken);
     }
 
     @Override
@@ -169,6 +172,11 @@ public class UserServiceImpl implements UserService {
             }
         }
         return userMapper.updateById(user, id);
+    }
+
+    @Override
+    public int updateStatus(Long id, Boolean status) {
+        return userMapper.updateStatusById(status, id);
     }
 
     @Override

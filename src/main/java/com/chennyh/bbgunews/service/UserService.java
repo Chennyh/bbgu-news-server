@@ -2,6 +2,7 @@ package com.chennyh.bbgunews.service;
 
 import com.chennyh.bbgunews.dto.UserInfoDTO;
 import com.chennyh.bbgunews.dto.UserLoginDTO;
+import com.chennyh.bbgunews.dto.UserRegisterDTO;
 import com.chennyh.bbgunews.dto.UserUpdateDTO;
 import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.User;
@@ -42,10 +43,10 @@ public interface UserService {
     /**
      * 注册用户
      *
-     * @param userLoginDTO 用户登录DTO
+     * @param userRegisterDTO 用户注册DTO
      * @return 用户对象
      */
-    User register(UserLoginDTO userLoginDTO);
+    User register(UserRegisterDTO userRegisterDTO);
 
     /**
      * 登录用户
@@ -54,6 +55,14 @@ public interface UserService {
      * @return 返回token
      */
     String login(UserLoginDTO userLoginDTO);
+
+    /**
+     * 刷新token
+     *
+     * @param oldToken 旧token
+     * @return 新token
+     */
+    String refreshToken(String oldToken);
 
     /**
      * 通过指定选项获取信息
@@ -81,6 +90,15 @@ public interface UserService {
      * @return 修改的行数
      */
     int updateUser(Long id, UserUpdateDTO userUpdateDTO);
+
+    /**
+     * 修改用户启用状态
+     *
+     * @param id     用户ID
+     * @param status 状态
+     * @return 修改的行数
+     */
+    int updateStatus(Long id, Boolean status);
 
     /**
      * 删除指定用户

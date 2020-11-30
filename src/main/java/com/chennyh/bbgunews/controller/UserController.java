@@ -7,6 +7,7 @@ import com.chennyh.bbgunews.common.CommonPage;
 import com.chennyh.bbgunews.common.CommonResult;
 import com.chennyh.bbgunews.dto.UserInfoDTO;
 import com.chennyh.bbgunews.dto.UserLoginDTO;
+import com.chennyh.bbgunews.dto.UserRegisterDTO;
 import com.chennyh.bbgunews.dto.UserUpdateDTO;
 import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.User;
@@ -18,6 +19,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
@@ -44,8 +47,8 @@ public class UserController {
     @ApiOperation("用户注册")
     @PostMapping("/register")
     @ResponseBody
-    public CommonResult<User> register(@RequestBody @Valid UserLoginDTO userLoginDTO) {
-        User user = userService.register(userLoginDTO);
+    public CommonResult<User> register(@RequestBody @Valid UserRegisterDTO userRegisterDTO) {
+        User user = userService.register(userRegisterDTO);
         if (BeanUtil.isEmpty(user)) {
             return CommonResult.failed();
         }
@@ -66,6 +69,21 @@ public class UserController {
         return CommonResult.success(tokenMap);
     }
 
+    @ApiOperation(value = "刷新token")
+    @GetMapping(value = "/refreshToken")
+    @ResponseBody
+    public CommonResult<Map<String, String>> refreshToken(HttpServletRequest request) {
+        String token = request.getHeader(tokenHeader);
+        String refreshToken = userService.refreshToken(token);
+        if (refreshToken == null) {
+            return CommonResult.failed("token已经过期！");
+        }
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", refreshToken);
+        tokenMap.put("tokenHead", tokenHead);
+        return CommonResult.success(tokenMap);
+    }
+
     @ApiOperation(value = "用户退出")
     @PostMapping("/logout")
     @ResponseBody
@@ -73,7 +91,7 @@ public class UserController {
         return CommonResult.success(null);
     }
 
-    @ApiOperation(value = "获取所有用户信息", notes = "成功返回用户列表")
+    @ApiOperation(value = "获取所有用户信息", notes = "成功返回用户列表，可进行分页查询")
     @GetMapping("/list")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ResponseBody
@@ -135,6 +153,17 @@ public class UserController {
             return CommonResult.success(count);
         }
         return CommonResult.failed("用户不存在");
+    }
+
+    @ApiOperation("修改帐号状态")
+    @PutMapping(value = "/status/{id}")
+    @ResponseBody
+    public CommonResult<Integer> updateStatus(@PathVariable Long id, @RequestParam Boolean status) {
+        int count = userService.updateStatus(id, status);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
     }
 
     @ApiOperation(value = "修改指定用户角色信息")

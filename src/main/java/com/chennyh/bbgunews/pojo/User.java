@@ -38,10 +38,10 @@ public class User {
     private String password;
 
     /**
-    * 状态 0：禁用，1：启用
-    */
-    @ApiModelProperty(value="状态 0：禁用，1：启用")
-    private Boolean enable;
+     * 帐号启用状态：0->禁用；1->启用
+     */
+    @ApiModelProperty(value = "帐号启用状态：0->禁用；1->启用")
+    private Boolean status;
 
     /**
     * 创建时间
