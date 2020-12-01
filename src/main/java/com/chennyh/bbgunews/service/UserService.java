@@ -80,7 +80,7 @@ public interface UserService {
      * @param pageNum  页码
      * @return 分页后的用户信息
      */
-    List<User> getUserList(String keyword, Integer pageSize, Integer pageNum);
+    List<UserInfoDTO> getUserList(String keyword, Integer pageSize, Integer pageNum);
 
     /**
      * 更新用户信息

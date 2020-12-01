@@ -2,6 +2,7 @@ package com.chennyh.bbgunews.dao;
 
 import java.util.List;
 
+import com.chennyh.bbgunews.dto.UserInfoDTO;
 import org.apache.ibatis.annotations.Param;
 import com.chennyh.bbgunews.pojo.User;
 
@@ -21,11 +22,11 @@ public interface UserMapper {
 
     int insertSelective(User user);
 
-    List<User> getByAll(User user);
+    List<UserInfoDTO> getByAll(User user);
 
     User getOneByAll(User user);
 
-    List<User> getAllByUsernameLike(@Param("likeUsername") String likeUsername);
+    List<UserInfoDTO> getAllByUsernameLike(@Param("likeUsername") String likeUsername);
 
     int updateById(@Param("updated") User updated, @Param("id") Long id);
 

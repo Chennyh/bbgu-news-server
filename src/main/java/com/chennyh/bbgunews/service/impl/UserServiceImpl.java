@@ -137,14 +137,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUserList(String keyword, Integer pageSize, Integer pageNum) {
+    public List<UserInfoDTO> getUserList(String keyword, Integer pageSize, Integer pageNum) {
         PageHelper.startPage(pageNum, pageSize);
-        List<User> users;
+        List<UserInfoDTO> users;
         if (StrUtil.isNotEmpty(keyword)) {
             users = userMapper.getAllByUsernameLike(keyword);
         } else {
             users = userMapper.getByAll(new User());
         }
+        for (UserInfoDTO user : users) {
+            user.setRoles(userRoleMapper.getAllByUserId(user.getId()));
+        }
+
         if (CollUtil.isNotEmpty(users)) {
             return users;
         }

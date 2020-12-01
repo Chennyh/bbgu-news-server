@@ -95,10 +95,10 @@ public class UserController {
     @GetMapping("/list")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ResponseBody
-    public CommonResult<CommonPage<User>> getUserList(@RequestParam(value = "keyword", required = false) String keyword,
+    public CommonResult<CommonPage<UserInfoDTO>> getUserList(@RequestParam(value = "keyword", required = false) String keyword,
                                                       @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
                                                       @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        List<User> users = userService.getUserList(keyword, pageSize, pageNum);
+        List<UserInfoDTO> users = userService.getUserList(keyword, pageSize, pageNum);
         if (CollUtil.isEmpty(users)) {
             return CommonResult.failed("获取失败");
         }

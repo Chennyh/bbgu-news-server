@@ -1,5 +1,11 @@
 package com.chennyh.bbgunews.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.chennyh.bbgunews.pojo.Category;
+
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,4 +15,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface CategoryMapper {
+
+    int insertSelective(Category category);
+
+    int updateById(@Param("updated") Category updated, @Param("id") Long id);
+
+    int deleteById(@Param("id") Long id);
+
+    List<Category> getByAll(Category category);
+
 }
