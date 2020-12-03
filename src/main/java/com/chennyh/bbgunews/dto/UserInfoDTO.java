@@ -19,6 +19,6 @@ public class UserInfoDTO extends User {
     /**
      * 角色列表
      */
-    @ApiModelProperty(value="角色列表")
+    @ApiModelProperty(value = "角色列表")
     private List<Role> roles;
 }

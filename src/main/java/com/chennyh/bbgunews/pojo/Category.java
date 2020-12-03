@@ -1,7 +1,9 @@
 package com.chennyh.bbgunews.pojo;
 
 import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,26 +18,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Category {
     /**
-    * 类别ID
-    */
-    @ApiModelProperty(value="类别ID")
+     * 类别ID
+     */
+    @ApiModelProperty(value = "类别ID")
     private Long id;
 
     /**
-    * 类别名字
-    */
-    @ApiModelProperty(value="类别名字")
+     * 类别名字
+     */
+    @ApiModelProperty(value = "类别名字")
     private String name;
 
     /**
-    * 创建时间
-    */
-    @ApiModelProperty(value="创建时间")
+     * 创建时间
+     */
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
     /**
-    * 更新时间
-    */
-    @ApiModelProperty(value="更新时间")
+     * 更新时间
+     */
+    @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 }

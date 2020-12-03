@@ -26,8 +26,6 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
 
     public SwaggerProperties swaggerProperties() {
         return SwaggerProperties.builder()

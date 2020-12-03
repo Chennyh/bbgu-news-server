@@ -19,22 +19,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
     /**
-    * 用户ID
-    */
-    @ApiModelProperty(value="用户ID")
+     * 用户ID
+     */
+    @ApiModelProperty(value = "用户ID")
     private Long id;
 
     /**
-    * 用户名
-    */
-    @ApiModelProperty(value="用户名")
+     * 用户名
+     */
+    @ApiModelProperty(value = "用户名")
     private String username;
 
     /**
-    * 用户密码
-    */
+     * 用户密码
+     */
     @JsonIgnore
-    @ApiModelProperty(value="用户密码")
+    @ApiModelProperty(value = "用户密码")
     private String password;
 
     /**
@@ -44,14 +44,14 @@ public class User {
     private Boolean status;
 
     /**
-    * 创建时间
-    */
-    @ApiModelProperty(value="创建时间")
+     * 创建时间
+     */
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
     /**
-    * 修改时间
-    */
-    @ApiModelProperty(value="修改时间")
+     * 修改时间
+     */
+    @ApiModelProperty(value = "修改时间")
     private Date updateTime;
 }

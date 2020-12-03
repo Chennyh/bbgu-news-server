@@ -15,12 +15,12 @@ public class RoleUpdateDTO {
     /**
      * 角色名
      */
-    @ApiModelProperty(value="角色名", required = true)
+    @ApiModelProperty(value = "角色名", required = true)
     private String name;
 
     /**
      * 角色描述
      */
-    @ApiModelProperty(value="角色描述", required = true)
+    @ApiModelProperty(value = "角色描述", required = true)
     private String description;
 }

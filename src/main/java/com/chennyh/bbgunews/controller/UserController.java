@@ -96,8 +96,8 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @ResponseBody
     public CommonResult<CommonPage<UserInfoDTO>> getUserList(@RequestParam(value = "keyword", required = false) String keyword,
-                                                      @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                      @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+                                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         List<UserInfoDTO> users = userService.getUserList(keyword, pageSize, pageNum);
         if (CollUtil.isEmpty(users)) {
             return CommonResult.failed("获取失败");

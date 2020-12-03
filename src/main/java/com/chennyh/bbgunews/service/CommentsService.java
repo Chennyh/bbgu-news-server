@@ -5,7 +5,7 @@ package com.chennyh.bbgunews.service;
  * @date 2020/11/16 18:56
  * @description 评论服务类
  */
-public interface CommentsService{
+public interface CommentsService {
 
 
 }

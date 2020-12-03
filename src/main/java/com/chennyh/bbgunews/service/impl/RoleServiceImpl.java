@@ -9,7 +9,9 @@ import com.chennyh.bbgunews.pojo.Role;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
+
 import com.chennyh.bbgunews.dao.RoleMapper;
 import com.chennyh.bbgunews.service.RoleService;
 
@@ -21,7 +23,7 @@ import java.util.List;
  * @description 角色服务实现类
  */
 @Service
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl implements RoleService {
 
     @Resource
     private RoleMapper roleMapper;

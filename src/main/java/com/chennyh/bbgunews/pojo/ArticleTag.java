@@ -14,18 +14,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArticleTag {
-    @ApiModelProperty(value="ID")
+    @ApiModelProperty(value = "ID")
     private Long id;
 
     /**
-    * 新闻ID
-    */
-    @ApiModelProperty(value="新闻ID")
+     * 新闻ID
+     */
+    @ApiModelProperty(value = "新闻ID")
     private Long articleId;
 
     /**
-    * 标签ID
-    */
-    @ApiModelProperty(value="标签ID")
+     * 标签ID
+     */
+    @ApiModelProperty(value = "标签ID")
     private Long tagId;
 }

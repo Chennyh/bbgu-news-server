@@ -5,7 +5,7 @@ package com.chennyh.bbgunews.service;
  * @date 2020/11/16 18:56
  * @description 微信用户服务类
  */
-public interface UserWxService{
+public interface UserWxService {
 
 
 }
