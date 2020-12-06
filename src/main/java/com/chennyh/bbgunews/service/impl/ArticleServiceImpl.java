@@ -1,5 +1,6 @@
 package com.chennyh.bbgunews.service.impl;
 
+import com.chennyh.bbgunews.dto.ArticleCreateDTO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,4 +19,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Resource
     private ArticleMapper articleMapper;
 
+    @Override
+    public int create(ArticleCreateDTO articleCreateDTO) {
+        return 0;
+    }
 }

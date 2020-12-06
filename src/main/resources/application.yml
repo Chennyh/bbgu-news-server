@@ -37,3 +37,4 @@ secure:
       - /user/register
       - /user/info
       - /user/logout
+      - /images/**

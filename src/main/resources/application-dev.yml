@@ -13,6 +13,9 @@ spring:
       stat-view-servlet: #访问监控网页的登录用户名和密码
         login-username: druid
         login-password: druid
+  servlet:
+    multipart:
+      location: F:\bbgu\Graduation-Project\upload\
 
 logging:
   level:
