@@ -2,9 +2,7 @@ package com.chennyh.bbgunews.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import com.chennyh.bbgunews.dto.ArticleAttributesDTO;
-import com.chennyh.bbgunews.dto.ArticleDTO;
-import com.chennyh.bbgunews.dto.ArticleQueryDTO;
+import com.chennyh.bbgunews.dto.*;
 import com.chennyh.bbgunews.exception.ApiException;
 import com.chennyh.bbgunews.pojo.Article;
 import com.chennyh.bbgunews.pojo.ArticleTag;
@@ -19,6 +17,8 @@ import javax.annotation.Resource;
 import com.chennyh.bbgunews.dao.ArticleMapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -89,7 +89,7 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleDTO articleDTO = new ArticleDTO();
         BeanUtils.copyProperties(article, articleDTO);
         //获取文章关联的所有标签ID
-        List<Long> tagIds =  articleTagService.getTagId(id);
+        List<Long> tagIds = articleTagService.getTagId(id);
         if (CollUtil.isNotEmpty(tagIds)) {
             articleDTO.setTags(tagService.getTags(tagIds));
         }
@@ -133,9 +133,37 @@ public class ArticleServiceImpl implements ArticleService {
                 id);
     }
 
+    @Override
+    public int batchUpdateReview(BatchUpdateReview batchUpdateReview) {
+        return articleMapper.updateReviewByIdIn(batchUpdateReview.getReview(), batchUpdateReview.getIds());
+    }
+
+    @Override
+    public int batchDelete(Collection<Long> ids) {
+        for (Long id : ids) {
+            deleteTags(id);
+        }
+        return articleMapper.deleteByIdIn(ids);
+    }
+
+    @Override
+    public int batchUpdateStat(BatchUpdateStat batchUpdateStat) {
+        return articleMapper.updateStatByIdIn(batchUpdateStat.getStat(), batchUpdateStat.getIds());
+    }
+
+    @Override
+    public int batchUpdateCategory(BatchUpdateCategory batchUpdateCategory) {
+        return articleMapper.updateCategoryIdByIdIn(batchUpdateCategory.getCategoryId(), batchUpdateCategory.getIds());
+    }
+
+    @Override
+    public int batchUpdateUser(BatchUpdateUser batchUpdateUser) {
+        return articleMapper.updateUserIdByIdIn(batchUpdateUser.getUserId(), batchUpdateUser.getIds());
+    }
+
     private void deleteTags(Long articleId) {
         //获取文章关联的所有标签ID
-        List<Long> tagIds =  articleTagService.getTagId(articleId);
+        List<Long> tagIds = articleTagService.getTagId(articleId);
         //删除该文章ID的关联的所有数据
         articleTagService.deleteByArticle(articleId);
         //删除文章关联的标签

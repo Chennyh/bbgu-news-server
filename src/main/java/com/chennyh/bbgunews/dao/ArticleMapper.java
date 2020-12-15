@@ -1,5 +1,7 @@
 package com.chennyh.bbgunews.dao;
 
+import java.util.Collection;
+
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -34,5 +36,14 @@ public interface ArticleMapper {
 
     int updatePageViewById(@Param("updatedPageView") Integer updatedPageView, @Param("id") Long id);
 
+    int updateReviewByIdIn(@Param("updatedReview") Boolean updatedReview, @Param("idCollection") Collection<Long> idCollection);
+
+    int deleteByIdIn(@Param("idCollection") Collection<Long> idCollection);
+
+    int updateStatByIdIn(@Param("updatedStat") Integer updatedStat, @Param("idCollection") Collection<Long> idCollection);
+
+    int updateCategoryIdByIdIn(@Param("updatedCategoryId") Long updatedCategoryId, @Param("idCollection") Collection<Long> idCollection);
+
+    int updateUserIdByIdIn(@Param("updatedUserId") Long updatedUserId, @Param("idCollection") Collection<Long> idCollection);
 
 }

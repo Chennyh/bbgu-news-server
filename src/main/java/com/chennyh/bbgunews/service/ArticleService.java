@@ -1,10 +1,9 @@
 package com.chennyh.bbgunews.service;
 
-import com.chennyh.bbgunews.dto.ArticleAttributesDTO;
-import com.chennyh.bbgunews.dto.ArticleDTO;
-import com.chennyh.bbgunews.dto.ArticleQueryDTO;
+import com.chennyh.bbgunews.dto.*;
 import com.chennyh.bbgunews.pojo.Article;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -74,4 +73,45 @@ public interface ArticleService {
      * @return 修改的行数
      */
     int updateAttr(Long id, ArticleAttributesDTO attributesDTO);
+
+    /**
+     * 批量修改评论状态
+     *
+     * @param batchUpdateReview 批量修改评论状态DTO
+     * @return 修改的行数
+     */
+    int batchUpdateReview(BatchUpdateReview batchUpdateReview);
+
+    /**
+     * 批量删除文章
+     *
+     * @param ids ID列表
+     * @return 修改的行数
+     */
+    int batchDelete(Collection<Long> ids);
+
+    /**
+     * 批量修改文章状态
+     *
+     * @param batchUpdateStat 批量更新文章状态
+     * @return 修改的行数
+     */
+    int batchUpdateStat(BatchUpdateStat batchUpdateStat);
+
+    /**
+     * 批量修改文章类别ID
+     *
+     * @param batchUpdateCategory 批量更新文章类别
+     * @return 修改的行数
+     */
+    int batchUpdateCategory(BatchUpdateCategory batchUpdateCategory);
+
+    /**
+     * 批量修改文章用户ID
+     *
+     * @param batchUpdateUser 批量更新文章用户
+     * @return 修改的行数
+     */
+    int batchUpdateUser(BatchUpdateUser batchUpdateUser);
+
 }

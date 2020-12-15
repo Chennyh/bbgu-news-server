@@ -4,9 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.chennyh.bbgunews.common.CommonPage;
 import com.chennyh.bbgunews.common.CommonResult;
-import com.chennyh.bbgunews.dto.ArticleAttributesDTO;
-import com.chennyh.bbgunews.dto.ArticleDTO;
-import com.chennyh.bbgunews.dto.ArticleQueryDTO;
+import com.chennyh.bbgunews.dto.*;
 import com.chennyh.bbgunews.pojo.Article;
 import com.chennyh.bbgunews.service.ArticleService;
 import com.chennyh.bbgunews.utils.ImgUtil;
@@ -135,6 +133,61 @@ public class ArticleController {
             return CommonResult.success(CommonPage.restPage(articleList));
         }
         return CommonResult.failed("获取失败");
+    }
+
+    @ApiOperation("批量修改文章评论状态")
+    @PutMapping(value = "/batch/review")
+    @ResponseBody
+    public CommonResult<Integer> batchUpdateReview(@Valid @RequestBody BatchUpdateReview batchUpdateReview) {
+        int count = articleService.batchUpdateReview(batchUpdateReview);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed("修改失败");
+    }
+
+    @ApiOperation("批量删除文章")
+    @DeleteMapping("/batch")
+    @ResponseBody
+    public CommonResult<Integer> batchDelete(@Valid @RequestBody BatchBase batchBase) {
+        int count = articleService.batchDelete(batchBase.getIds());
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed("文章不存在");
+    }
+
+    @ApiOperation("批量修改文章状态")
+    @PutMapping(value = "/batch/stat")
+    @ResponseBody
+    public CommonResult<Integer> batchUpdateStat(@Valid @RequestBody BatchUpdateStat batchUpdateStat) {
+        int count = articleService.batchUpdateStat(batchUpdateStat);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed("修改失败");
+    }
+
+    @ApiOperation("批量修改文章类别")
+    @PutMapping(value = "/batch/category")
+    @ResponseBody
+    public CommonResult<Integer> batchUpdateCategory(@Valid @RequestBody BatchUpdateCategory batchUpdateCategory) {
+        int count = articleService.batchUpdateCategory(batchUpdateCategory);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed("修改失败");
+    }
+
+    @ApiOperation("批量修改文章用户")
+    @PutMapping(value = "/batch/user")
+    @ResponseBody
+    public CommonResult<Integer> batchUpdateUser(@Valid @RequestBody BatchUpdateUser batchUpdateUser) {
+        int count = articleService.batchUpdateUser(batchUpdateUser);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed("修改失败");
     }
 
 }
