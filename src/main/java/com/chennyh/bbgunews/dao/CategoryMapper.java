@@ -24,4 +24,6 @@ public interface CategoryMapper {
 
     List<Category> getByAll(Category category);
 
+    Category getOneById(@Param("id") Long id);
+
 }

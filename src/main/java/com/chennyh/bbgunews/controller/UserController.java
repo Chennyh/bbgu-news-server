@@ -105,6 +105,17 @@ public class UserController {
         return CommonResult.success(CommonPage.restPage(users));
     }
 
+    @ApiOperation("获取所有用户")
+    @GetMapping("/listAll")
+    @ResponseBody
+    public CommonResult<List<UserInfoDTO>> listAll() {
+        List<UserInfoDTO> userList = userService.listAll();
+        if (CollUtil.isNotEmpty(userList)) {
+            return CommonResult.success(userList);
+        }
+        return CommonResult.failed("获取失败");
+    }
+
     @ApiOperation(value = "获取当前登录用户信息", notes = "成功返回用户信息JSON")
     @GetMapping("/info")
     @ResponseBody

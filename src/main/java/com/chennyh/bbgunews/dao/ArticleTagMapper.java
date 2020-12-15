@@ -1,5 +1,10 @@
 package com.chennyh.bbgunews.dao;
 
+import com.chennyh.bbgunews.pojo.ArticleTag;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,4 +14,11 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ArticleTagMapper {
+
+    int insertList(@Param("list") List<ArticleTag> list);
+
+    List<Long> getTagIdByArticleId(@Param("articleId") Long articleId);
+
+    int deleteByArticleId(@Param("articleId") Long articleId);
+
 }

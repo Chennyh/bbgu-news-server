@@ -65,4 +65,9 @@ public class CategoryServiceImpl implements CategoryService {
         throw new ApiException("未获取到角色列表");
     }
 
+    @Override
+    public Category getOne(Long id) {
+        return categoryMapper.getOneById(id);
+    }
+
 }

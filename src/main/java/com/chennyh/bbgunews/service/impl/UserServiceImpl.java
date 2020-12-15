@@ -156,6 +156,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserInfoDTO> listAll() {
+        List<UserInfoDTO> userList = userMapper.getByAll(new User());
+        if (CollUtil.isNotEmpty(userList)) {
+            return userList;
+        }
+        throw new ApiException("未获取到用户列表");
+    }
+
+    @Override
     public int updateUser(Long id, UserUpdateDTO userUpdateDTO) {
         User user = new User();
         BeanUtils.copyProperties(userUpdateDTO, user);

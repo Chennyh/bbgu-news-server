@@ -52,4 +52,11 @@ public interface CategoryService {
      * @return 类别列表
      */
     List<Category> listAll();
+
+    /**
+     * 获取一个类别信息
+     * @param id 类别ID
+     * @return 类别
+     */
+    Category getOne(Long id);
 }

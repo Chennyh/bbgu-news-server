@@ -1,5 +1,6 @@
 package com.chennyh.bbgunews.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.chennyh.bbgunews.common.CommonPage;
 import com.chennyh.bbgunews.common.CommonResult;
@@ -81,6 +82,17 @@ public class CategoryController {
             return CommonResult.success(categoryList);
         }
         return CommonResult.failed("获取失败");
+    }
+
+    @ApiOperation("获取指定类别")
+    @GetMapping("/{id}")
+    @ResponseBody
+    public CommonResult<Category> getOne(@PathVariable Long id) {
+        Category category = categoryService.getOne(id);
+        if (BeanUtil.isNotEmpty(category)) {
+            return CommonResult.success(category);
+        }
+        return CommonResult.failed("类别不存在");
     }
 
 }

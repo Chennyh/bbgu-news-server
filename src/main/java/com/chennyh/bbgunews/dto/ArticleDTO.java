@@ -14,7 +14,8 @@ import java.util.List;
  */
 @Setter
 @Getter
-public class ArticleCreateDTO extends Article {
-    private String[] dynamicTags;
+public class ArticleDTO extends Article {
     private List<Tag> tags;
+    private String username;
+    private String categoryName;
 }

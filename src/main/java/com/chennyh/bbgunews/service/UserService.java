@@ -83,6 +83,13 @@ public interface UserService {
     List<UserInfoDTO> getUserList(String keyword, Integer pageSize, Integer pageNum);
 
     /**
+     * 获取所有用户列表
+     *
+     * @return 用户列表
+     */
+    List<UserInfoDTO> listAll();
+
+    /**
      * 更新用户信息
      *
      * @param id            用户ID

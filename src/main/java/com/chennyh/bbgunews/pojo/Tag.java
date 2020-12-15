@@ -17,6 +17,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Tag {
+    public Tag(String name) {
+        this.name = name;
+    }
+
     /**
      * 标签ID
      */

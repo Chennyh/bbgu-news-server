@@ -14,6 +14,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArticleTag {
+
+    public ArticleTag(Long articleId, Long tagId) {
+        this.articleId = articleId;
+        this.tagId = tagId;
+    }
+
     @ApiModelProperty(value = "ID")
     private Long id;
 
