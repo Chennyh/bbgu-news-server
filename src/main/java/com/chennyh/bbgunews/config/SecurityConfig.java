@@ -7,11 +7,9 @@ import com.chennyh.bbgunews.filter.*;
 import com.chennyh.bbgunews.service.UserService;
 import com.chennyh.bbgunews.service.UserWxService;
 import com.chennyh.bbgunews.utils.JwtTokenUtil;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -26,8 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Chennyh
@@ -81,37 +77,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new RestAuthenticationEntryPoint();
     }
 
-//    @ConditionalOnBean(name = "dynamicSecurityService")
-//    @Bean
-//    public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
-//        return new DynamicAccessDecisionManager();
-//    }
-//
-//    @ConditionalOnBean(name = "dynamicSecurityService")
-//    @Bean
-//    public DynamicSecurityFilter dynamicSecurityFilter() {
-//        return new DynamicSecurityFilter();
-//    }
-//
-//    @ConditionalOnBean(name = "dynamicSecurityService")
-//    @Bean
-//    public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
-//        return new DynamicSecurityMetadataSource();
-//    }
-//
-//
-//    @Bean
-//    public DynamicSecurityService dynamicSecurityService() {
-//        return () -> {
-//            Map<String, ConfigAttribute> map = new ConcurrentHashMap<>();
-//                List<UmsResource> resourceList = resourceService.listAll();
-//                for (UmsResource resource : resourceList) {
-//                    map.put(resource.getUrl(), new org.springframework.security.access.SecurityConfig(resource.getId() + ":" + resource.getName()));
-//                }
-//            return map;
-//        };
-//    }
-
     @Bean
     @Override
     protected UserDetailsService userDetailsService() {
@@ -154,6 +119,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 自定义权限拦截器JWT过滤器
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-//                .addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);
     }
 }
