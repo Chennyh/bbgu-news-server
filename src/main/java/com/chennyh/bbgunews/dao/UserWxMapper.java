@@ -1,5 +1,9 @@
 package com.chennyh.bbgunews.dao;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.chennyh.bbgunews.pojo.UserWx;
+
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,4 +13,12 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserWxMapper {
+
+    int insertSelective(UserWx userWx);
+
+    UserWx getOneByOpenId(@Param("openId") String openId);
+
+    int updateSessionKeyByOpenId(@Param("updatedSessionKey") String updatedSessionKey, @Param("openId") String openId);
+
+
 }

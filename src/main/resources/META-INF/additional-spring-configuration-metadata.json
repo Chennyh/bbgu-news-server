@@ -19,5 +19,10 @@
       "name": "jwt.tokenHead",
       "type": "java.lang.String",
       "description": "JWT负载中拿到开头."
+    },
+    {
+      "name": "wx.miniapp.configs",
+      "type": "java.lang.String",
+      "description": "微信配置."
     }
   ] }

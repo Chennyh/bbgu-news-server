@@ -90,7 +90,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodePassword);
         user.setStatus(user.getStatus());
         userMapper.insertSelective(user);
-        user = userMapper.getOneByUsername(user.getUsername());
 
         //添加权限，默认为普通用户
         List<UserRole> userRoles = new ArrayList<>();

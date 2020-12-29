@@ -1,9 +1,11 @@
 package com.chennyh.bbgunews.config;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.chennyh.bbgunews.exception.RestAuthenticationEntryPoint;
 import com.chennyh.bbgunews.exception.RestfulAccessDeniedHandler;
 import com.chennyh.bbgunews.filter.*;
 import com.chennyh.bbgunews.service.UserService;
+import com.chennyh.bbgunews.service.UserWxService;
 import com.chennyh.bbgunews.utils.JwtTokenUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private UserWxService userWxService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -111,7 +116,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected UserDetailsService userDetailsService() {
         //获取登录用户信息
-        return username -> userService.loadUserByUsername(username);
+        return username -> ObjectUtil.isNull(userWxService.loadUserByUsername(username)) ? userService.loadUserByUsername(username) : userWxService.loadUserByUsername(username);
     }
 
     @Override

@@ -19,6 +19,13 @@
 	</properties>
 
 	<dependencies>
+		<!--	WxJava 开发工具包	-->
+		<dependency>
+			<groupId>com.github.binarywang</groupId>
+			<artifactId>weixin-java-miniapp</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
 		<!--	分页插件	-->
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>

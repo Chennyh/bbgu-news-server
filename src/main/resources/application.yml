@@ -38,3 +38,10 @@ secure:
       - /user/info
       - /user/logout
       - /images/**
+      - /wx/login
+
+wx:
+  miniapp:
+    configs:
+      - appid: #微信小程序的appid
+        secret: #微信小程序的Secret
