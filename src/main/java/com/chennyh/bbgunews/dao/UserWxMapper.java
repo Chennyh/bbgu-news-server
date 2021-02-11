@@ -20,5 +20,6 @@ public interface UserWxMapper {
 
     int updateSessionKeyByOpenId(@Param("updatedSessionKey") String updatedSessionKey, @Param("openId") String openId);
 
+    int updateByOpenId(@Param("updated") UserWx updated, @Param("openId") String openId);
 
 }

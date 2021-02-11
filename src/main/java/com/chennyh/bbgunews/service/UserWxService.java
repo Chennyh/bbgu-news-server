@@ -1,6 +1,7 @@
 package com.chennyh.bbgunews.service;
 
 import com.chennyh.bbgunews.dto.UserWxDTO;
+import com.chennyh.bbgunews.dto.UserWxProfileUpdateDTO;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -25,4 +26,12 @@ public interface UserWxService {
      * @return 返回登录成功的token
      */
     String login(UserWxDTO userWxDTO);
+
+    /**
+     * 更新用户信息
+     *
+     * @param userWxProfileUpdateDTO 微信用户登录DTO
+     * @return 修改的行数
+     */
+    int update(UserWxProfileUpdateDTO userWxProfileUpdateDTO);
 }

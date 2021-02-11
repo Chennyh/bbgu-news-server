@@ -24,6 +24,8 @@ public interface ArticleMapper {
 
     Article getById(@Param("id") Long id);
 
+    List<Article> getByCategoryIdOrderByCreateTimeDesc(@Param("categoryId") Long categoryId);
+
     List<Article> getByAll(Article article);
 
     int deleteById(@Param("id") Long id);

@@ -10,6 +10,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.chennyh.bbgunews.config.WxMaConfig;
 import com.chennyh.bbgunews.dto.UserDetailsImpl;
 import com.chennyh.bbgunews.dto.UserWxDTO;
+import com.chennyh.bbgunews.dto.UserWxProfileUpdateDTO;
 import com.chennyh.bbgunews.exception.ApiException;
 import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.User;
@@ -18,6 +19,9 @@ import com.chennyh.bbgunews.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -44,7 +48,8 @@ public class UserWxServiceImpl implements UserWxService {
     @Resource
     private JwtTokenUtil jwtTokenUtil;
 
-    private final String appId = "wx6f6eca297bd8865d";
+    @Value("${wx.miniapp.configs[0].appid}")
+    private String appid;
 
     @Override
     public UserDetails loadUserByUsername(String openid) {
@@ -73,7 +78,7 @@ public class UserWxServiceImpl implements UserWxService {
     @Override
     public String login(UserWxDTO userWxDTO) {
         try {
-            final WxMaService wxService = WxMaConfig.getMaService(appId);
+            final WxMaService wxService = WxMaConfig.getMaService(appid);
             WxMaJscode2SessionResult session = wxService.getUserService().getSessionInfo(userWxDTO.getCode());
             //通过OpenID查询当前用户是否已存在，如过存在则直接登录，否则创建用户
             if (userExists(session.getOpenid())) {
@@ -104,8 +109,26 @@ public class UserWxServiceImpl implements UserWxService {
         }
     }
 
+    @Override
+    public int update(UserWxProfileUpdateDTO userWxProfileUpdateDTO) {
+        UserWx userWx = new UserWx();
+        BeanUtils.copyProperties(userWxProfileUpdateDTO, userWx);
+
+        return userWxMapper.updateByOpenId(userWx, getCurrentOpenId());
+    }
+
     private boolean userExists(String openId) {
         UserWx userWx = userWxMapper.getOneByOpenId(openId);
         return BeanUtil.isEmpty(userWx);
+    }
+
+    private String getCurrentOpenId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() != null) {
+            UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+            return principal.getUsername();
+        }
+        return null;
+
     }
 }

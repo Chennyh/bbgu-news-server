@@ -57,6 +57,14 @@ public interface ArticleService {
     List<Article> list(ArticleQueryDTO articleQueryDTO, Integer pageSize, Integer pageNum);
 
     /**
+     * 查询指定类别 id 的所有文章
+     *
+     * @param categoryId 类别ID
+     * @return 返回文章列表
+     */
+    List<ArticleDTO> listForCategory(Long categoryId);
+
+    /**
      * 修改文章评论状态
      *
      * @param id     文章ID

@@ -81,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected UserDetailsService userDetailsService() {
         //获取登录用户信息
-        return username -> ObjectUtil.isNull(userWxService.loadUserByUsername(username)) ? userService.loadUserByUsername(username) : userWxService.loadUserByUsername(username);
+        return username -> ObjectUtil.isNull(userService.getUserByUserName(username)) ? userWxService.loadUserByUsername(username) : userService.loadUserByUsername(username);
     }
 
     @Override

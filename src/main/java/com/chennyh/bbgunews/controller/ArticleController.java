@@ -135,6 +135,17 @@ public class ArticleController {
         return CommonResult.failed("获取失败");
     }
 
+    @ApiOperation("根据类别ID查询所有文章")
+    @GetMapping("/category/{id}")
+    @ResponseBody
+    public CommonResult<CommonPage<ArticleDTO>> getByCategory(@PathVariable Long id) {
+        List<ArticleDTO> articleDTOList = articleService.listForCategory(id);
+        if (CollUtil.isNotEmpty(articleDTOList)) {
+            return CommonResult.success(CommonPage.restPage(articleDTOList));
+        }
+        return CommonResult.failed("获取失败");
+    }
+
     @ApiOperation("批量修改文章评论状态")
     @PutMapping(value = "/batch/review")
     @ResponseBody

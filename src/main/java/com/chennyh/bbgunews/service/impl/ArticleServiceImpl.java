@@ -17,7 +17,6 @@ import javax.annotation.Resource;
 import com.chennyh.bbgunews.dao.ArticleMapper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -115,6 +114,30 @@ public class ArticleServiceImpl implements ArticleService {
 
         if (CollUtil.isNotEmpty(articleList)) {
             return articleList;
+        }
+        throw new ApiException("未获取到文章列表");
+    }
+
+    @Override
+    public List<ArticleDTO> listForCategory(Long categoryId) {
+        List<Article> articleList = articleMapper.getByCategoryIdOrderByCreateTimeDesc(categoryId);
+        List<ArticleDTO> articleDTOList = new ArrayList<>();
+        for (Article article : articleList) {
+            ArticleDTO articleDTO = new ArticleDTO();
+            BeanUtils.copyProperties(article, articleDTO);
+            //获取文章关联的所有标签ID
+            List<Long> tagIds = articleTagService.getTagId(article.getId());
+            if (CollUtil.isNotEmpty(tagIds)) {
+                articleDTO.setTags(tagService.getTags(tagIds));
+            }
+            articleDTO.setCategoryName(categoryService.getOne(article.getCategoryId()).getName());
+            articleDTO.setUsername(userService.getUserByUserId(article.getUserId()).getUsername());
+
+            articleDTOList.add(articleDTO);
+        }
+
+        if (CollUtil.isNotEmpty(articleDTOList)) {
+            return articleDTOList;
         }
         throw new ApiException("未获取到文章列表");
     }
