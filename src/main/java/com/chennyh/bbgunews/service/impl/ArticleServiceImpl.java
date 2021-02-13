@@ -120,7 +120,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleDTO> listForCategory(Long categoryId) {
-        List<Article> articleList = articleMapper.getByCategoryIdOrderByCreateTimeDesc(categoryId);
+        List<Article> articleList = articleMapper.getByCategoryIdAndStatOrderByCreateTimeDesc(categoryId, 1);
         List<ArticleDTO> articleDTOList = new ArrayList<>();
         for (Article article : articleList) {
             ArticleDTO articleDTO = new ArticleDTO();

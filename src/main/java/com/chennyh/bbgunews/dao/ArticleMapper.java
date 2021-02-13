@@ -24,7 +24,7 @@ public interface ArticleMapper {
 
     Article getById(@Param("id") Long id);
 
-    List<Article> getByCategoryIdOrderByCreateTimeDesc(@Param("categoryId") Long categoryId);
+    List<Article> getByCategoryIdAndStatOrderByCreateTimeDesc(@Param("categoryId") Long categoryId, @Param("stat") Integer stat);
 
     List<Article> getByAll(Article article);
 
