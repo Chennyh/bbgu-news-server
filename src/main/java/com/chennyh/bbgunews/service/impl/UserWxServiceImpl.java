@@ -7,6 +7,8 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.chennyh.bbgunews.config.WxMaConfig;
 import com.chennyh.bbgunews.dto.UserDetailsImpl;
 import com.chennyh.bbgunews.dto.UserWxDTO;
@@ -16,6 +18,7 @@ import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.User;
 import com.chennyh.bbgunews.pojo.UserWx;
 import com.chennyh.bbgunews.utils.JwtTokenUtil;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.BeanUtils;
@@ -115,6 +118,27 @@ public class UserWxServiceImpl implements UserWxService {
         BeanUtils.copyProperties(userWxProfileUpdateDTO, userWx);
 
         return userWxMapper.updateByOpenId(userWx, getCurrentOpenId());
+    }
+
+    @Override
+    public List<UserWx> get(String keyword, Integer pageSize, Integer pageNum) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<UserWx> userWxList;
+        if (StrUtil.isNotEmpty(keyword)) {
+            userWxList = userWxMapper.getAllByNickNameLike(keyword);
+        } else {
+            userWxList = userWxMapper.getByAll(new UserWx());
+        }
+
+        if (CollUtil.isNotEmpty(userWxList)) {
+            return userWxList;
+        }
+        throw new ApiException("未获取到用户列表");
+    }
+
+    @Override
+    public int delete(Long id) {
+        return userWxMapper.deleteById(id);
     }
 
     private boolean userExists(String openId) {

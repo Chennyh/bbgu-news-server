@@ -2,7 +2,10 @@ package com.chennyh.bbgunews.service;
 
 import com.chennyh.bbgunews.dto.UserWxDTO;
 import com.chennyh.bbgunews.dto.UserWxProfileUpdateDTO;
+import com.chennyh.bbgunews.pojo.UserWx;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.List;
 
 /**
  * @author Chennyh
@@ -34,4 +37,21 @@ public interface UserWxService {
      * @return 修改的行数
      */
     int update(UserWxProfileUpdateDTO userWxProfileUpdateDTO);
+
+    /**
+     * 根据用户名分页查询用户
+     *
+     * @param keyword  用户名，不必须
+     * @param pageSize 页数
+     * @param pageNum  页码
+     * @return 分页后的用户信息
+     */
+    List<UserWx> get(String keyword, Integer pageSize, Integer pageNum);
+
+    /**
+     * 通过ID删除用户
+     *
+     * @param id 用户id
+     */
+    int delete(Long id);
 }

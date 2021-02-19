@@ -1,5 +1,7 @@
 package com.chennyh.bbgunews.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.chennyh.bbgunews.pojo.UserWx;
@@ -21,5 +23,11 @@ public interface UserWxMapper {
     int updateSessionKeyByOpenId(@Param("updatedSessionKey") String updatedSessionKey, @Param("openId") String openId);
 
     int updateByOpenId(@Param("updated") UserWx updated, @Param("openId") String openId);
+
+    List<UserWx> getByAll(UserWx userWx);
+
+    List<UserWx> getAllByNickNameLike(@Param("likeNickName") String likeNickName);
+
+    int deleteById(@Param("id") Long id);
 
 }

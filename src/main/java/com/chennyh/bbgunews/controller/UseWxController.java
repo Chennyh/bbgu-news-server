@@ -1,19 +1,23 @@
 package com.chennyh.bbgunews.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.chennyh.bbgunews.common.CommonPage;
 import com.chennyh.bbgunews.common.CommonResult;
 import com.chennyh.bbgunews.dto.UserWxDTO;
 import com.chennyh.bbgunews.dto.UserWxProfileUpdateDTO;
+import com.chennyh.bbgunews.pojo.UserWx;
 import com.chennyh.bbgunews.service.UserWxService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,5 +60,30 @@ public class UseWxController {
             return CommonResult.success(count);
         }
         return CommonResult.failed("修改失败");
+    }
+
+    @ApiOperation(value = "获取所有用户信息", notes = "成功返回用户列表，可进行分页查询")
+    @GetMapping("/list")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @ResponseBody
+    public CommonResult<CommonPage<UserWx>> getUserList(@RequestParam(value = "keyword", required = false) String keyword,
+                                                        @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                                        @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        List<UserWx> users = userWxService.get(keyword, pageSize, pageNum);
+        if (CollUtil.isEmpty(users)) {
+            return CommonResult.failed("获取失败");
+        }
+        return CommonResult.success(CommonPage.restPage(users));
+    }
+
+    @ApiOperation(value = "删除指定用户")
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public CommonResult<Integer> deleteUser(@PathVariable Long id) {
+        int count = userWxService.delete(id);
+        if (count > 0) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed("用户不存在");
     }
 }
