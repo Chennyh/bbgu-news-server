@@ -1,6 +1,7 @@
 package com.chennyh.bbgunews.service;
 
 import com.chennyh.bbgunews.dto.CollectDTO;
+import com.chennyh.bbgunews.dto.CollectInfoDTO;
 import com.chennyh.bbgunews.pojo.Collect;
 
 import java.util.List;
@@ -25,5 +26,21 @@ public interface CollectService {
      *
      * @return 收藏列表
      */
-    List<Collect> getByOpenId();
+    List<CollectInfoDTO> getByOpenId();
+
+    /**
+     * 通过ID删除收藏
+     *
+     * @param id 收藏ID
+     * @return 修改的行数
+     */
+    int delete(Long id);
+
+    /**
+     * 通过OpenID和文章ID删除收藏
+     *
+     * @param articleId 文章ID
+     * @return 修改的行数
+     */
+    int deleteByArticle(Long articleId);
 }

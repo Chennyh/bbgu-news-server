@@ -2,6 +2,7 @@ package com.chennyh.bbgunews.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import com.chennyh.bbgunews.dao.*;
 import com.chennyh.bbgunews.dto.*;
 import com.chennyh.bbgunews.exception.ApiException;
 import com.chennyh.bbgunews.pojo.Article;
@@ -13,8 +14,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-
-import com.chennyh.bbgunews.dao.ArticleMapper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,16 +31,16 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleMapper articleMapper;
 
     @Resource
-    private ArticleTagService articleTagService;
+    private ArticleTagMapper articleTagMapper;
 
     @Resource
-    private TagService tagService;
+    private TagMapper tagMapper;
 
     @Resource
-    private UserService userService;
+    private UserMapper userMapper;
 
     @Resource
-    private CategoryService categoryService;
+    private CategoryMapper categoryMapper;
 
     @Override
     public int create(ArticleDTO articleDTO) {
@@ -88,12 +87,12 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleDTO articleDTO = new ArticleDTO();
         BeanUtils.copyProperties(article, articleDTO);
         //获取文章关联的所有标签ID
-        List<Long> tagIds = articleTagService.getTagId(id);
+        List<Long> tagIds = articleTagMapper.getTagIdByArticleId(id);
         if (CollUtil.isNotEmpty(tagIds)) {
-            articleDTO.setTags(tagService.getTags(tagIds));
+            articleDTO.setTags(tagMapper.getByIdIn(tagIds));
         }
-        articleDTO.setCategoryName(categoryService.getOne(article.getCategoryId()).getName());
-        articleDTO.setUsername(userService.getUserByUserId(article.getUserId()).getUsername());
+        articleDTO.setCategoryName(categoryMapper.getNameById(article.getCategoryId()));
+        articleDTO.setUsername(userMapper.getUsernameById(article.getUserId()));
 
         return articleDTO;
     }
@@ -126,12 +125,12 @@ public class ArticleServiceImpl implements ArticleService {
             ArticleDTO articleDTO = new ArticleDTO();
             BeanUtils.copyProperties(article, articleDTO);
             //获取文章关联的所有标签ID
-            List<Long> tagIds = articleTagService.getTagId(article.getId());
+            List<Long> tagIds = articleTagMapper.getTagIdByArticleId(article.getId());
             if (CollUtil.isNotEmpty(tagIds)) {
-                articleDTO.setTags(tagService.getTags(tagIds));
+                articleDTO.setTags(tagMapper.getByIdIn(tagIds));
             }
-            articleDTO.setCategoryName(categoryService.getOne(article.getCategoryId()).getName());
-            articleDTO.setUsername(userService.getUserByUserId(article.getUserId()).getUsername());
+            articleDTO.setCategoryName(categoryMapper.getNameById(article.getCategoryId()));
+            articleDTO.setUsername(userMapper.getUsernameById(article.getUserId()));
 
             articleDTOList.add(articleDTO);
         }
@@ -186,18 +185,18 @@ public class ArticleServiceImpl implements ArticleService {
 
     private void deleteTags(Long articleId) {
         //获取文章关联的所有标签ID
-        List<Long> tagIds = articleTagService.getTagId(articleId);
+        List<Long> tagIds = articleTagMapper.getTagIdByArticleId(articleId);
         //删除该文章ID的关联的所有数据
-        articleTagService.deleteByArticle(articleId);
+        articleTagMapper.deleteByArticleId(articleId);
         //删除文章关联的标签
         if (CollUtil.isNotEmpty(tagIds)) {
-            tagService.deleteTags(tagIds);
+            tagMapper.deleteByIdIn(tagIds);
         }
     }
 
     private void addTagsToArticle(List<Tag> tags, Long articleId) {
         //先把标签存储在数据库
-        int i = tagService.createList(tags);
+        int i = tagMapper.insertList(tags);
         if (i <= 0) {
             throw new ApiException("标签插入失败");
         }
@@ -207,6 +206,6 @@ public class ArticleServiceImpl implements ArticleService {
         for (Tag tag : tags) {
             articleTags.add(new ArticleTag(articleId, tag.getId()));
         }
-        articleTagService.createList(articleTags);
+        articleTagMapper.insertList(articleTags);
     }
 }

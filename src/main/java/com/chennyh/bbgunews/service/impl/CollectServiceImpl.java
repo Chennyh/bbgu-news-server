@@ -1,7 +1,9 @@
 package com.chennyh.bbgunews.service.impl;
 
 import com.chennyh.bbgunews.dao.ArticleMapper;
+import com.chennyh.bbgunews.dao.UserMapper;
 import com.chennyh.bbgunews.dto.CollectDTO;
+import com.chennyh.bbgunews.dto.CollectInfoDTO;
 import com.chennyh.bbgunews.dto.UserDetailsImpl;
 import com.chennyh.bbgunews.pojo.Collect;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +16,7 @@ import javax.annotation.Resource;
 import com.chennyh.bbgunews.dao.CollectMapper;
 import com.chennyh.bbgunews.service.CollectService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +30,12 @@ public class CollectServiceImpl implements CollectService {
     @Resource
     private CollectMapper collectMapper;
 
+    @Resource
+    private ArticleMapper articleMapper;
+
+    @Resource
+    private UserMapper userMapper;
+
     @Override
     public int create(CollectDTO collectDTO) {
         Collect collect = new Collect();
@@ -36,8 +45,27 @@ public class CollectServiceImpl implements CollectService {
     }
 
     @Override
-    public List<Collect> getByOpenId() {
-        return collectMapper.getByOpenId(getCurrentOpenId());
+    public List<CollectInfoDTO> getByOpenId() {
+        List<Collect> collectList = collectMapper.getByOpenId(getCurrentOpenId());
+        List<CollectInfoDTO> collectInfoDTOList = new ArrayList<>();
+        for (Collect collect : collectList) {
+            CollectInfoDTO collectInfoDTO = new CollectInfoDTO();
+            BeanUtils.copyProperties(collect, collectInfoDTO);
+            collectInfoDTO.setTitle(articleMapper.getTitleById(collect.getArticleId()));
+            collectInfoDTO.setUsername(userMapper.getUsernameById(articleMapper.getUserIdById(collect.getArticleId())));
+            collectInfoDTOList.add(collectInfoDTO);
+        }
+        return collectInfoDTOList;
+    }
+
+    @Override
+    public int delete(Long id) {
+        return collectMapper.deleteById(id);
+    }
+
+    @Override
+    public int deleteByArticle(Long articleId) {
+        return collectMapper.deleteByArticleIdAndOpenId(articleId, getCurrentOpenId());
     }
 
     private String getCurrentOpenId() {

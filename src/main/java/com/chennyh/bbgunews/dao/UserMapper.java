@@ -34,5 +34,8 @@ public interface UserMapper {
 
     int updateStatusById(@Param("updatedStatus") Boolean updatedStatus, @Param("id") Long id);
 
+    String getUsernameById(@Param("id") Long id);
+
+
 
 }

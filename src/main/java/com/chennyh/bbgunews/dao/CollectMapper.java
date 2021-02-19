@@ -19,4 +19,8 @@ public interface CollectMapper {
 
     List<Collect> getByOpenId(@Param("openId") String openId);
 
+    int deleteById(@Param("id") Long id);
+
+    int deleteByArticleIdAndOpenId(@Param("articleId") Long articleId, @Param("openId") String openId);
+
 }

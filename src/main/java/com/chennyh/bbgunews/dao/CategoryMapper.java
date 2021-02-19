@@ -26,4 +26,6 @@ public interface CategoryMapper {
 
     Category getOneById(@Param("id") Long id);
 
+    String getNameById(@Param("id") Long id);
+
 }
