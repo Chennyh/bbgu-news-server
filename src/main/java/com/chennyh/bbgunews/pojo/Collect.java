@@ -1,5 +1,6 @@
 package com.chennyh.bbgunews.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -11,16 +12,16 @@ import lombok.NoArgsConstructor;
 /**
  * @author Chennyh
  * @date 2021/2/19 19:17
- * @description 评论表
+ * @description 用户收藏表
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Comments {
+public class Collect {
     /**
-     * 评论ID
+     * 收藏ID
      */
-    @ApiModelProperty(value = "评论ID")
+    @ApiModelProperty(value = "收藏ID")
     private Long id;
 
     /**
@@ -34,12 +35,6 @@ public class Comments {
      */
     @ApiModelProperty(value = "新闻ID")
     private Long articleId;
-
-    /**
-     * 评论内容
-     */
-    @ApiModelProperty(value = "评论内容")
-    private String context;
 
     /**
      * 创建时间

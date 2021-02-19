@@ -153,6 +153,5 @@ public class UserWxServiceImpl implements UserWxService {
             return principal.getUsername();
         }
         return null;
-
     }
 }

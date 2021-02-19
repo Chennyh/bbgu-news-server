@@ -48,4 +48,5 @@ public interface ArticleMapper {
 
     int updateUserIdByIdIn(@Param("updatedUserId") Long updatedUserId, @Param("idCollection") Collection<Long> idCollection);
 
+    String getTitleById(@Param("id") Long id);
 }

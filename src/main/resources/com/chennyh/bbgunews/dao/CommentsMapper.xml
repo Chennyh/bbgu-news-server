@@ -5,7 +5,7 @@
     <!--@mbg.generated-->
     <!--@Table comments-->
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="user_wx_id" jdbcType="BIGINT" property="userWxId" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
     <result column="article_id" jdbcType="BIGINT" property="articleId" />
     <result column="context" jdbcType="LONGVARCHAR" property="context" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -13,6 +13,6 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, user_wx_id, article_id, context, create_time, update_time
+    id, open_id, article_id, context, create_time, update_time
   </sql>
 </mapper>
