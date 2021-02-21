@@ -17,10 +17,12 @@ public interface CollectMapper {
 
     int insertSelective(Collect collect);
 
-    List<Collect> getByOpenId(@Param("openId") String openId);
+    List<Collect> getByOpenIdOrderByCreateTimeDesc(@Param("openId") String openId);
 
     int deleteById(@Param("id") Long id);
 
     int deleteByArticleIdAndOpenId(@Param("articleId") Long articleId, @Param("openId") String openId);
+
+    Collect getOneByOpenIdAndArticleId(@Param("openId") String openId, @Param("articleId") Long articleId);
 
 }

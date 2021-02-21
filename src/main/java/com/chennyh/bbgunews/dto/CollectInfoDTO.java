@@ -25,4 +25,10 @@ public class CollectInfoDTO extends Collect {
      */
     @ApiModelProperty(value = "用户名")
     private String username;
+
+    /**
+     * 用户名
+     */
+    @ApiModelProperty(value = "是否显示")
+    private Boolean show;
 }

@@ -18,4 +18,5 @@ public class ArticleDTO extends Article {
     private List<Tag> tags;
     private String username;
     private String categoryName;
+    private Boolean collect;
 }

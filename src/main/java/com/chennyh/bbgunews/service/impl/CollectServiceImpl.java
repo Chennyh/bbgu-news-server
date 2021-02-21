@@ -1,10 +1,12 @@
 package com.chennyh.bbgunews.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.chennyh.bbgunews.dao.ArticleMapper;
 import com.chennyh.bbgunews.dao.UserMapper;
 import com.chennyh.bbgunews.dto.CollectDTO;
 import com.chennyh.bbgunews.dto.CollectInfoDTO;
 import com.chennyh.bbgunews.dto.UserDetailsImpl;
+import com.chennyh.bbgunews.exception.ApiException;
 import com.chennyh.bbgunews.pojo.Collect;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
@@ -38,21 +40,25 @@ public class CollectServiceImpl implements CollectService {
 
     @Override
     public int create(CollectDTO collectDTO) {
-        Collect collect = new Collect();
-        BeanUtils.copyProperties(collectDTO, collect);
-        collect.setOpenId(getCurrentOpenId());
-        return collectMapper.insertSelective(collect);
+        if (collectExists(collectDTO.getArticleId())) {
+            Collect collect = new Collect();
+            BeanUtils.copyProperties(collectDTO, collect);
+            collect.setOpenId(getCurrentOpenId());
+            return collectMapper.insertSelective(collect);
+        }
+        throw new ApiException("收藏已存在");
     }
 
     @Override
     public List<CollectInfoDTO> getByOpenId() {
-        List<Collect> collectList = collectMapper.getByOpenId(getCurrentOpenId());
+        List<Collect> collectList = collectMapper.getByOpenIdOrderByCreateTimeDesc(getCurrentOpenId());
         List<CollectInfoDTO> collectInfoDTOList = new ArrayList<>();
         for (Collect collect : collectList) {
             CollectInfoDTO collectInfoDTO = new CollectInfoDTO();
             BeanUtils.copyProperties(collect, collectInfoDTO);
             collectInfoDTO.setTitle(articleMapper.getTitleById(collect.getArticleId()));
             collectInfoDTO.setUsername(userMapper.getUsernameById(articleMapper.getUserIdById(collect.getArticleId())));
+            collectInfoDTO.setShow(false);
             collectInfoDTOList.add(collectInfoDTO);
         }
         return collectInfoDTOList;
@@ -66,6 +72,11 @@ public class CollectServiceImpl implements CollectService {
     @Override
     public int deleteByArticle(Long articleId) {
         return collectMapper.deleteByArticleIdAndOpenId(articleId, getCurrentOpenId());
+    }
+
+    private boolean collectExists(Long articleId) {
+        Collect collect = collectMapper.getOneByOpenIdAndArticleId(getCurrentOpenId(), articleId);
+        return BeanUtil.isEmpty(collect);
     }
 
     private String getCurrentOpenId() {
