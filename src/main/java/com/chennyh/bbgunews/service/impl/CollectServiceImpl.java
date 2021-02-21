@@ -5,12 +5,10 @@ import com.chennyh.bbgunews.dao.ArticleMapper;
 import com.chennyh.bbgunews.dao.UserMapper;
 import com.chennyh.bbgunews.dto.CollectDTO;
 import com.chennyh.bbgunews.dto.CollectInfoDTO;
-import com.chennyh.bbgunews.dto.UserDetailsImpl;
 import com.chennyh.bbgunews.exception.ApiException;
 import com.chennyh.bbgunews.pojo.Collect;
+import com.chennyh.bbgunews.utils.CurrentUserUtil;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,7 +22,7 @@ import java.util.List;
 /**
  * @author Chennyh
  * @date 2021/2/19 18:13
- * @description 收藏服务类
+ * @description 收藏服务实现类
  */
 @Service
 public class CollectServiceImpl implements CollectService {
@@ -38,12 +36,15 @@ public class CollectServiceImpl implements CollectService {
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private CurrentUserUtil currentUserUtil;
+
     @Override
     public int create(CollectDTO collectDTO) {
         if (collectExists(collectDTO.getArticleId())) {
             Collect collect = new Collect();
             BeanUtils.copyProperties(collectDTO, collect);
-            collect.setOpenId(getCurrentOpenId());
+            collect.setOpenId(currentUserUtil.getCurrentOpenId());
             return collectMapper.insertSelective(collect);
         }
         throw new ApiException("收藏已存在");
@@ -51,7 +52,7 @@ public class CollectServiceImpl implements CollectService {
 
     @Override
     public List<CollectInfoDTO> getByOpenId() {
-        List<Collect> collectList = collectMapper.getByOpenIdOrderByCreateTimeDesc(getCurrentOpenId());
+        List<Collect> collectList = collectMapper.getByOpenIdOrderByCreateTimeDesc(currentUserUtil.getCurrentOpenId());
         List<CollectInfoDTO> collectInfoDTOList = new ArrayList<>();
         for (Collect collect : collectList) {
             CollectInfoDTO collectInfoDTO = new CollectInfoDTO();
@@ -71,20 +72,12 @@ public class CollectServiceImpl implements CollectService {
 
     @Override
     public int deleteByArticle(Long articleId) {
-        return collectMapper.deleteByArticleIdAndOpenId(articleId, getCurrentOpenId());
+        return collectMapper.deleteByArticleIdAndOpenId(articleId, currentUserUtil.getCurrentOpenId());
     }
 
     private boolean collectExists(Long articleId) {
-        Collect collect = collectMapper.getOneByOpenIdAndArticleId(getCurrentOpenId(), articleId);
+        Collect collect = collectMapper.getOneByOpenIdAndArticleId(currentUserUtil.getCurrentOpenId(), articleId);
         return BeanUtil.isEmpty(collect);
     }
 
-    private String getCurrentOpenId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() != null) {
-            UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-            return principal.getUsername();
-        }
-        return null;
-    }
 }

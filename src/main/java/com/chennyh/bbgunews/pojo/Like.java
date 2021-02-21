@@ -10,17 +10,17 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author Chennyh
- * @date 2021/2/19 19:17
- * @description 用户收藏表
+ * @date 2021/2/21 15:15
+ * @description 用户点赞表
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Collect {
+public class Like {
     /**
-     * 收藏ID
+     * 点赞ID
      */
-    @ApiModelProperty(value = "收藏ID")
+    @ApiModelProperty(value = "点赞ID")
     private Long id;
 
     /**

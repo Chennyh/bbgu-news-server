@@ -37,7 +37,7 @@ public class CollectController {
         return CommonResult.failed("创建失败");
     }
 
-    @ApiOperation("添加收藏")
+    @ApiOperation("获取收藏列表")
     @GetMapping
     @ResponseBody
     public CommonResult<List<CollectInfoDTO>> get() {

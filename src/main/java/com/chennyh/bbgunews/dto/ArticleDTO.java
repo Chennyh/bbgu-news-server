@@ -19,4 +19,5 @@ public class ArticleDTO extends Article {
     private String username;
     private String categoryName;
     private Boolean collect;
+    private Boolean like;
 }

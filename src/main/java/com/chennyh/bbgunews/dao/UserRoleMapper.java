@@ -22,5 +22,4 @@ public interface UserRoleMapper {
 
     int deleteByUserId(@Param("userId") Long userId);
 
-
 }

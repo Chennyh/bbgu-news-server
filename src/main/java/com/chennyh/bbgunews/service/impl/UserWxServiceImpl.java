@@ -17,14 +17,13 @@ import com.chennyh.bbgunews.exception.ApiException;
 import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.User;
 import com.chennyh.bbgunews.pojo.UserWx;
+import com.chennyh.bbgunews.utils.CurrentUserUtil;
 import com.chennyh.bbgunews.utils.JwtTokenUtil;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -53,6 +52,9 @@ public class UserWxServiceImpl implements UserWxService {
 
     @Value("${wx.miniapp.configs[0].appid}")
     private String appid;
+
+    @Resource
+    private CurrentUserUtil currentUserUtil;
 
     @Override
     public UserDetails loadUserByUsername(String openid) {
@@ -117,7 +119,7 @@ public class UserWxServiceImpl implements UserWxService {
         UserWx userWx = new UserWx();
         BeanUtils.copyProperties(userWxProfileUpdateDTO, userWx);
 
-        return userWxMapper.updateByOpenId(userWx, getCurrentOpenId());
+        return userWxMapper.updateByOpenId(userWx, currentUserUtil.getCurrentOpenId());
     }
 
     @Override
@@ -146,12 +148,4 @@ public class UserWxServiceImpl implements UserWxService {
         return BeanUtil.isEmpty(userWx);
     }
 
-    private String getCurrentOpenId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() != null) {
-            UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-            return principal.getUsername();
-        }
-        return null;
-    }
 }

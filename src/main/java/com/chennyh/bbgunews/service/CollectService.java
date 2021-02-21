@@ -2,14 +2,13 @@ package com.chennyh.bbgunews.service;
 
 import com.chennyh.bbgunews.dto.CollectDTO;
 import com.chennyh.bbgunews.dto.CollectInfoDTO;
-import com.chennyh.bbgunews.pojo.Collect;
 
 import java.util.List;
 
 /**
  * @author Chennyh
  * @date 2021/2/19 18:13
- * @description 收藏服务实现类
+ * @description 收藏服务类
  */
 public interface CollectService {
 

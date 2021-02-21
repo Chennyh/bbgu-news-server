@@ -9,10 +9,9 @@ import com.chennyh.bbgunews.pojo.Article;
 import com.chennyh.bbgunews.pojo.ArticleTag;
 import com.chennyh.bbgunews.pojo.Tag;
 import com.chennyh.bbgunews.service.*;
+import com.chennyh.bbgunews.utils.CurrentUserUtil;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -46,6 +45,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Resource
     private CollectMapper collectMapper;
+
+    @Resource
+    private LikeMapper likeMapper;
+
+    @Resource
+    private CurrentUserUtil currentUserUtil;
 
     @Override
     public int create(ArticleDTO articleDTO) {
@@ -98,7 +103,8 @@ public class ArticleServiceImpl implements ArticleService {
         }
         articleDTO.setCategoryName(categoryMapper.getNameById(article.getCategoryId()));
         articleDTO.setUsername(userMapper.getUsernameById(article.getUserId()));
-        articleDTO.setCollect(BeanUtil.isNotEmpty(collectMapper.getOneByOpenIdAndArticleId(getCurrentOpenId(),id)));
+        articleDTO.setCollect(BeanUtil.isNotEmpty(collectMapper.getOneByOpenIdAndArticleId(currentUserUtil.getCurrentOpenId(), id)));
+        articleDTO.setLike(BeanUtil.isNotEmpty(likeMapper.getOneByOpenIdAndArticleId(currentUserUtil.getCurrentOpenId(), id)));
 
         return articleDTO;
     }
@@ -215,12 +221,4 @@ public class ArticleServiceImpl implements ArticleService {
         articleTagMapper.insertList(articleTags);
     }
 
-    private String getCurrentOpenId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() != null) {
-            UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-            return principal.getUsername();
-        }
-        return null;
-    }
 }
