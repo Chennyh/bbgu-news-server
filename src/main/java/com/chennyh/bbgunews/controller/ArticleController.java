@@ -201,4 +201,15 @@ public class ArticleController {
         return CommonResult.failed("修改失败");
     }
 
+    @ApiOperation("获取文章统计数据")
+    @GetMapping("/count")
+    @ResponseBody
+    public CommonResult<ArticleCountDTO> count() {
+        ArticleCountDTO count = articleService.count();
+        if (BeanUtil.isNotEmpty(count)) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed("统计数据获取失败");
+    }
+
 }

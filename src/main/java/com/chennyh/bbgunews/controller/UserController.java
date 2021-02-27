@@ -5,10 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.chennyh.bbgunews.common.CommonPage;
 import com.chennyh.bbgunews.common.CommonResult;
-import com.chennyh.bbgunews.dto.UserInfoDTO;
-import com.chennyh.bbgunews.dto.UserLoginDTO;
-import com.chennyh.bbgunews.dto.UserRegisterDTO;
-import com.chennyh.bbgunews.dto.UserUpdateDTO;
+import com.chennyh.bbgunews.dto.*;
 import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.User;
 import com.chennyh.bbgunews.service.UserService;
@@ -199,5 +196,15 @@ public class UserController {
         return CommonResult.failed();
     }
 
+    @ApiOperation(value = "获取用户统计数据")
+    @GetMapping("/count")
+    @ResponseBody
+    public CommonResult<UserCountDTO> count() {
+        UserCountDTO count = userService.count();
+        if (BeanUtil.isNotEmpty(count)) {
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed("获取用户统计数据失败");
+    }
 
 }

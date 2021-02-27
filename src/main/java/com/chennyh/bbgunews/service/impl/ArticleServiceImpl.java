@@ -195,6 +195,16 @@ public class ArticleServiceImpl implements ArticleService {
         return articleMapper.updateUserIdByIdIn(batchUpdateUser.getUserId(), batchUpdateUser.getIds());
     }
 
+    @Override
+    public ArticleCountDTO count() {
+        ArticleCountDTO articleCountDTO = new ArticleCountDTO();
+        articleCountDTO.setTotal(articleMapper.count());
+        articleCountDTO.setPublished(articleMapper.countByStat(1));
+        articleCountDTO.setDraft(articleMapper.countByStat(0));
+        articleCountDTO.setPageView(articleMapper.countPageView());
+        return articleCountDTO;
+    }
+
     private void deleteTags(Long articleId) {
         //获取文章关联的所有标签ID
         List<Long> tagIds = articleTagMapper.getTagIdByArticleId(articleId);

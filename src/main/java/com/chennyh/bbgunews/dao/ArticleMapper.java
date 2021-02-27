@@ -52,4 +52,10 @@ public interface ArticleMapper {
 
     Long getUserIdById(@Param("id") Long id);
 
+    Long countByStat(@Param("stat") Integer stat);
+
+    Long count();
+
+    Long countPageView();
+
 }

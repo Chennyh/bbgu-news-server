@@ -1,9 +1,6 @@
 package com.chennyh.bbgunews.service;
 
-import com.chennyh.bbgunews.dto.UserInfoDTO;
-import com.chennyh.bbgunews.dto.UserLoginDTO;
-import com.chennyh.bbgunews.dto.UserRegisterDTO;
-import com.chennyh.bbgunews.dto.UserUpdateDTO;
+import com.chennyh.bbgunews.dto.*;
 import com.chennyh.bbgunews.pojo.Role;
 import com.chennyh.bbgunews.pojo.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -131,5 +128,12 @@ public interface UserService {
      * @return 角色列表
      */
     List<Role> getRoles(Long id);
+
+    /**
+     * 获取用户统计数据
+     *
+     * @return 用户统计数据对象
+     */
+    UserCountDTO count();
 
 }

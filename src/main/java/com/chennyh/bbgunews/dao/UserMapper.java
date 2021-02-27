@@ -36,4 +36,6 @@ public interface UserMapper {
 
     String getUsernameById(@Param("id") Long id);
 
+    Long count();
+
 }

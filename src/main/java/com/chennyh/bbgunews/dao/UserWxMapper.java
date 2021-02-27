@@ -30,4 +30,6 @@ public interface UserWxMapper {
 
     int deleteById(@Param("id") Long id);
 
+    Long count();
+
 }

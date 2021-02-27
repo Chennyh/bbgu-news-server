@@ -122,4 +122,11 @@ public interface ArticleService {
      */
     int batchUpdateUser(BatchUpdateUser batchUpdateUser);
 
+    /**
+     * 获取文章统计数据
+     *
+     * @return 返回统计对象
+     */
+    ArticleCountDTO count();
+
 }

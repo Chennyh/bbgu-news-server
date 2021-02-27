@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.chennyh.bbgunews.dao.UserRoleMapper;
+import com.chennyh.bbgunews.dao.UserWxMapper;
 import com.chennyh.bbgunews.dto.*;
 import com.chennyh.bbgunews.exception.ApiException;
 import com.chennyh.bbgunews.exception.Asserts;
@@ -41,6 +42,8 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private UserWxMapper userWxMapper;
     @Resource
     private UserRoleMapper userRoleMapper;
     @Resource
@@ -217,6 +220,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Role> getRoles(Long id) {
         return userRoleMapper.getAllByUserId(id);
+    }
+
+    @Override
+    public UserCountDTO count() {
+        UserCountDTO userCountDTO = new UserCountDTO();
+        Long userCount = userMapper.count();
+        Long userWxCount = userWxMapper.count();
+        Long admin = userRoleMapper.countByRoleId(2L);
+        userCountDTO.setWxUser(userWxCount);
+        userCountDTO.setTotal(userCount + userWxCount);
+        userCountDTO.setAdmin(admin);
+        userCountDTO.setUser(userCount - admin);
+
+        return userCountDTO;
     }
 
 
